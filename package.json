@@ -1,0 +1,60 @@
+{
+  "name": "sgm-ia-sistema-gestion-matriculas",
+  "version": "1.0.0",
+  "description": "Sistema de Gestión de Matrículas para Universidad con Apoyo y Filtros IA - Unidades Tecnológicas de Santander",
+  "main": "src/whatever/server.js",
+  "scripts": {
+    "start": "node src/whatever/server.js",
+    "dev": "nodemon src/whatever/server.js",
+    "seed": "node src/whatever/Config/seeders.js",
+    "test": "jest",
+    "lint": "eslint src/**/*.js",
+    "microservice:notifications": "node src/whatever/microservices/notification-service.js",
+    "microservice:pdf-reports": "node src/whatever/microservices/pdf-report-service.js",
+    "microservice:file-generation": "node src/whatever/microservices/file-generation-service.js",
+    "release": "standard-version",
+    "release:first": "standard-version --first-release",
+    "release:patch": "standard-version --release-as patch",
+    "release:minor": "standard-version --release-as minor",
+    "release:major": "standard-version --release-as major"
+  },
+  "keywords": [
+    "matriculas",
+    "universidad",
+    "ia",
+    "gestion",
+    "uts"
+  ],
+  "authors": [
+    "John Eduardo Ortiz Castellanos <jeduardoortiz@uts.edu.co>",
+    "Emmanuel Moreno Rueda <emmanuelmoreno@uts.edu.co>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.6.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "exceljs": "^4.4.0",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "express-session": "^1.17.3",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.3.0",
+    "mysql2": "^3.6.5",
+    "nodemailer": "^6.9.7",
+    "pdfkit": "^0.20.2",
+    "sequelize": "^6.35.0",
+    "sqlite3": "^6.0.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.2",
+    "standard-version": "^9.5.0"
+  }
+}

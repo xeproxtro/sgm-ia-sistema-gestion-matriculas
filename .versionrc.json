@@ -1,0 +1,48 @@
+{
+  "types": [
+    {
+      "type": "feat",
+      "section": "Features"
+    },
+    {
+      "type": "fix",
+      "section": "Bug Fixes"
+    },
+    {
+      "type": "chore",
+      "hidden": true
+    },
+    {
+      "type": "docs",
+      "hidden": true
+    },
+    {
+      "type": "style",
+      "hidden": true
+    },
+    {
+      "type": "refactor",
+      "hidden": true
+    },
+    {
+      "type": "perf",
+      "hidden": true
+    },
+    {
+      "type": "test",
+      "hidden": true
+    },
+    {
+      "type": "build",
+      "hidden": true
+    },
+    {
+      "type": "ci",
+      "hidden": true
+    }
+  ],
+  "commitUrlFormat": "https://github.com/xeproxtro/sgm-ia-sistema-gestion-matriculas/commits/{{hash}}",
+  "compareUrlFormat": "https://github.com/xeproxtro/sgm-ia-sistema-gestion-matriculas/compare/{{previousTag}}...{{currentTag}}",
+  "issueUrlFormat": "https://github.com/xeproxtro/sgm-ia-sistema-gestion-matriculas/issues/{{id}}",
+  "releaseCommitMessageFormat": "chore(release): {{currentTag}}"
+}

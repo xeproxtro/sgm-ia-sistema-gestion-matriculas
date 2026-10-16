@@ -1,0 +1,264 @@
+---
+# Ansible playbook for deploying SGM-IA to Kubernetes
+# This playbook:
+# 1. Installs Docker and Kubernetes components
+# 2. Sets up a Kubernetes cluster
+# 3. Deploys the SGM-IA application
+
+- name: Prepare Kubernetes nodes
+  hosts: kubernetes_nodes
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+
+    - name: Install dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+          - python3
+          - python3-pip
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Disable swap
+      command: swapoff -a
+      ignore_errors: yes
+
+    - name: Remove swap from fstab
+      lineinfile:
+        path: /etc/fstab
+        regexp: 'swap'
+        state: absent
+
+    - name: Load kernel modules
+      modprobe:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - overlay
+        - br_netfilter
+
+    - name: Add kernel modules to /etc/modules-load.d
+      copy:
+        content: |
+          overlay
+          br_netfilter
+        dest: /etc/modules-load.d/k8s.conf
+
+    - name: Set sysctl parameters
+      sysctl:
+        name: "{{ item }}"
+        value: "1"
+        state: present
+        reload: yes
+      loop:
+        - net.bridge.bridge-nf-call-iptables
+        - net.bridge.bridge-nf-call-ip6tables
+        - net.ipv4.ip_forward
+
+    - name: Add sysctl to /etc/sysctl.d
+      copy:
+        content: |
+          net.bridge.bridge-nf-call-iptables = 1
+          net.bridge.bridge-nf-call-ip6tables = 1
+          net.ipv4.ip_forward = 1
+        dest: /etc/sysctl.d/k8s.conf
+
+- name: Install Docker
+  hosts: kubernetes_nodes
+  become: yes
+  tasks:
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Create Docker daemon configuration
+      copy:
+        content: |
+          {
+            "exec-opts": ["native.cgroupdriver=systemd"],
+            "log-driver": "json-file",
+            "log-opts": {
+              "max-size": "100m"
+            },
+            "storage-driver": "overlay2"
+          }
+        dest: /etc/docker/daemon.json
+
+    - name: Restart Docker
+      systemd:
+        name: docker
+        state: restarted
+        enabled: yes
+
+    - name: Add user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+- name: Install Kubernetes
+  hosts: kubernetes_nodes
+  become: yes
+  tasks:
+    - name: Add Kubernetes GPG key
+      apt_key:
+        url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add Kubernetes repository
+      apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Kubernetes packages
+      apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+        update_cache: yes
+        hold: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Restart kubelet
+      systemd:
+        name: kubelet
+        state: restarted
+        enabled: yes
+
+- name: Initialize Kubernetes cluster on master
+  hosts: kubernetes_master
+  become: yes
+  tasks:
+    - name: Initialize Kubernetes cluster
+      command: kubeadm init --pod-network-cidr=10.244.0.0/16
+      args:
+        creates: /etc/kubernetes/admin.conf
+
+    - name: Create .kube directory
+      file:
+        path: /home/{{ ansible_user }}/.kube
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Copy kubeconfig to user home
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/{{ ansible_user }}/.kube/config
+        remote_src: yes
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Install Calico CNI
+      command: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+
+    - name: Get join command
+      command: kubeadm token create --print-join-command
+      register: join_command
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+
+    - name: Save join command to file
+      copy:
+        content: "{{ join_command.stdout }}"
+        dest: /tmp/k8s_join_command.sh
+        mode: '0755'
+
+    - name: Fetch join command
+      fetch:
+        src: /tmp/k8s_join_command.sh
+        dest: ./k8s_join_command.sh
+        flat: yes
+
+- name: Join workers to cluster
+  hosts: kubernetes_workers
+  become: yes
+  tasks:
+    - name: Copy join command
+      copy:
+        src: ./k8s_join_command.sh
+        dest: /tmp/k8s_join_command.sh
+        mode: '0755'
+
+    - name: Join cluster
+      command: /tmp/k8s_join_command.sh
+      args:
+        creates: /etc/kubernetes/kubelet.conf
+
+- name: Deploy SGM-IA application
+  hosts: kubernetes_master
+  become: yes
+  become_user: "{{ ansible_user }}"
+  tasks:
+    - name: Create k8s directory
+      file:
+        path: /home/{{ ansible_user }}/sgm-ia-k8s
+        state: directory
+
+    - name: Copy Kubernetes manifests
+      copy:
+        src: ../k8s/
+        dest: /home/{{ ansible_user }}/sgm-ia-k8s/
+
+    - name: Build Docker image (if needed)
+      command: docker build -t sgm-ia:latest .
+      args:
+        chdir: /home/{{ ansible_user }}/sgm-ia-k8s/../../
+      when: false  # Set to true if building on cluster nodes
+
+    - name: Load Docker image into kind/minikube (if using)
+      command: kind load docker-image sgm-ia:latest
+      when: false  # Set to true if using kind/minikube
+
+    - name: Apply Kubernetes manifests
+      command: kubectl apply -k /home/{{ ansible_user }}/sgm-ia-k8s/
+      environment:
+        KUBECONFIG: /home/{{ ansible_user }}/.kube/config
+
+    - name: Wait for deployment to be ready
+      command: kubectl wait --for=condition=available --timeout=300s deployment/sgm-ia-app
+      environment:
+        KUBECONFIG: /home/{{ ansible_user }}/.kube/config
+
+    - name: Get service status
+      command: kubectl get svc sgm-ia-service
+      environment:
+        KUBECONFIG: /home/{{ ansible_user }}/.kube/config
+      register: service_status
+
+    - name: Display service information
+      debug:
+        var: service_status.stdout

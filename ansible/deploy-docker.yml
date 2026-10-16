@@ -1,0 +1,125 @@
+---
+# Simplified Ansible playbook for deploying SGM-IA with Docker Compose
+# This is ideal for local development or single-server deployments
+
+- name: Deploy SGM-IA with Docker Compose
+  hosts: all
+  become: yes
+  vars:
+    project_path: /opt/sgm-ia
+    docker_compose_file: docker-compose.yml
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker
+      block:
+        - name: Install dependencies
+          apt:
+            name:
+              - apt-transport-https
+              - ca-certificates
+              - curl
+              - gnupg
+              - lsb-release
+            state: present
+          when: ansible_os_family == "Debian"
+
+        - name: Add Docker GPG key
+          apt_key:
+            url: https://download.docker.com/linux/ubuntu/gpg
+            state: present
+          when: ansible_os_family == "Debian"
+
+        - name: Add Docker repository
+          apt_repository:
+            repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
+            state: present
+          when: ansible_os_family == "Debian"
+
+        - name: Install Docker
+          apt:
+            name:
+              - docker-ce
+              - docker-ce-cli
+              - containerd.io
+              - docker-compose-plugin
+            state: present
+            update_cache: yes
+          when: ansible_os_family == "Debian"
+
+        - name: Start Docker service
+          systemd:
+            name: docker
+            state: started
+            enabled: yes
+
+    - name: Create project directory
+      file:
+        path: "{{ project_path }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Copy application files
+      synchronize:
+        src: ../
+        dest: "{{ project_path }}/"
+        delete: yes
+        rsync_opts:
+          - "--exclude=node_modules"
+          - "--exclude=.git"
+          - "--exclude=coverage"
+          - "--exclude=logs"
+
+    - name: Copy .env file
+      copy:
+        src: ../.env
+        dest: "{{ project_path }}/.env"
+        mode: '0600'
+      when: false  # Set to true and create .env first
+
+    - name: Create .env from example
+      copy:
+        src: ../.env.example
+        dest: "{{ project_path }}/.env"
+        mode: '0600'
+      when: false  # Set to true if using example
+
+    - name: Build Docker image
+      command: docker compose build
+      args:
+        chdir: "{{ project_path }}"
+
+    - name: Start Docker Compose
+      command: docker compose up -d
+      args:
+        chdir: "{{ project_path }}"
+
+    - name: Wait for application to be healthy
+      wait_for:
+        host: localhost
+        port: 3000
+        delay: 30
+        timeout: 300
+
+    - name: Check container status
+      command: docker compose ps
+      args:
+        chdir: "{{ project_path }}"
+      register: compose_status
+
+    - name: Display container status
+      debug:
+        var: compose_status.stdout
+
+    - name: Display access information
+      debug:
+        msg:
+          - "SGM-IA deployed successfully!"
+          - "Application URL: http://{{ ansible_default_ipv4.address }}:3000"
+          - "MySQL available on port 3306"
+          - "Check logs with: docker compose logs -f"

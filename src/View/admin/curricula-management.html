@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Gestión de Mallas Curriculares</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+    <link rel="stylesheet" href="/Assets/css/admin.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+                <span class="admin-badge">Administrador</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/admin-dashboard.html">
+                    <i class="icon-home"></i> Volver al Dashboard
+                </a></li>
+                <li><a href="/admin/students-management.html">
+                    <i class="icon-users"></i> Gestión Estudiantes
+                </a></li>
+                <li><a href="/admin/curricula-management.html" class="active">
+                    <i class="icon-graduation"></i> Mallas Curriculares
+                </a></li>
+                <li><a href="/admin/queue-monitoring.html">
+                    <i class="icon-clock"></i> Monitoreo de Colas
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar admin-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="adminName">Administrador</p>
+                        <p class="user-role">Admin</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Gestión de Mallas Curriculares</h1>
+                <div class="user-status">
+                    <span class="status-indicator online"></span>
+                    <span id="currentDate"></span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Lista de Mallas Curriculares -->
+                <section class="card curricula-list-card">
+                    <div class="section-header">
+                        <h2>Mallas Curriculares Activas</h2>
+                        <button id="addCurriculumBtn" class="btn btn-success">
+                            <i class="icon-plus"></i> Nueva Malla
+                        </button>
+                    </div>
+
+                    <div class="curricula-grid" id="curriculaGrid">
+                        <!-- Se cargarán dinámicamente -->
+                    </div>
+                </section>
+
+                <!-- Detalle de Malla Curricular -->
+                <section class="card curriculum-detail-card" id="curriculumDetailCard" style="display: none;">
+                    <div class="curriculum-header">
+                        <h2 id="curriculumTitle">Malla Curricular</h2>
+                        <div class="curriculum-actions">
+                            <button id="editCurriculumBtn" class="btn btn-secondary">
+                                <i class="icon-edit"></i> Editar
+                            </button>
+                            <button id="addSubjectBtn" class="btn btn-primary">
+                                <i class="icon-plus"></i> Agregar Materia
+                            </button>
+                            <button id="closeDetailBtn" class="btn btn-danger">
+                                <i class="icon-close"></i> Cerrar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="curriculum-info">
+                        <div class="info-item">
+                            <span class="info-label">Versión:</span>
+                            <span class="info-value" id="curriculumVersion">2024-1</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Créditos Totales:</span>
+                            <span class="info-value" id="totalCredits">160</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Duración:</span>
+                            <span class="info-value" id="duration">10 semestres</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Estado:</span>
+                            <span class="info-value status-active" id="curriculumStatus">Activa</span>
+                        </div>
+                    </div>
+
+                    <!-- Materias por Semestre -->
+                    <div class="subjects-by-semester">
+                        <h3>Materias por Semestre</h3>
+                        <div id="semesterSubjects" class="semester-subjects-container">
+                            <!-- Se cargarán dinámicamente -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Agregar Materia -->
+    <div id="subjectModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agregar Materia a Malla</h3>
+                <button class="modal-close" id="closeSubjectModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="subjectForm">
+                    <div class="form-group">
+                        <label for="subjectCode">Código de Materia *</label>
+                        <input type="text" id="subjectCode" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subjectName">Nombre de Materia *</label>
+                        <input type="text" id="subjectName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subjectCredits">Créditos *</label>
+                        <input type="number" id="subjectCredits" class="form-control" min="1" max="6" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subjectType">Tipo *</label>
+                        <select id="subjectType" class="form-control" required>
+                            <option value="mandatory">Obligatoria</option>
+                            <option value="elective">Electiva</option>
+                            <option value="optional">Optativa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="subjectSemester">Semestre *</label>
+                        <input type="number" id="subjectSemester" class="form-control" min="1" max="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="prerequisites">Prerrequisitos (códigos separados por coma)</label>
+                        <input type="text" id="prerequisites" class="form-control" placeholder="Ej: IS101, IS102">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelSubjectBtn">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Assets/js/admin-curricula.js"></script>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Panel de Administrador</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+    <link rel="stylesheet" href="/Assets/css/admin.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+                <span class="admin-badge">Administrador</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="#" data-section="overview" class="active">
+                    <i class="icon-home"></i> Inicio
+                </a></li>
+                <li><a href="#" data-section="students">
+                    <i class="icon-users"></i> Gestión Estudiantes
+                </a></li>
+                <li><a href="#" data-section="curricula">
+                    <i class="icon-graduation"></i> Mallas Curriculares
+                </a></li>
+                <li><a href="#" data-section="queue-management">
+                    <i class="icon-clock"></i> Monitoreo de Colas
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar admin-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="adminName">Administrador</p>
+                        <p class="user-role">Admin</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1 id="pageTitle">Panel de Administrador</h1>
+                <div class="top-bar-actions">
+                    <div class="maintenance-toggle">
+                        <label class="switch">
+                            <input type="checkbox" id="maintenanceMode">
+                            <span class="slider"></span>
+                        </label>
+                        <span>Mantenimiento</span>
+                    </div>
+                    <div class="notification-bell">
+                        <i class="icon-bell"></i>
+                        <span class="notification-count">5</span>
+                    </div>
+                </div>
+            </header>
+
+            <div id="contentArea" class="content-area">
+                <!-- Overview Section -->
+                <section id="overviewSection" class="dashboard-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon icon-students"></div>
+                            <div class="stat-info">
+                                <h3>Total Estudiantes</h3>
+                                <p class="stat-value" id="totalStudents">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-queue"></div>
+                            <div class="stat-info">
+                                <h3>En Cola</h3>
+                                <p class="stat-value" id="totalInQueue">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-active"></div>
+                            <div class="stat-info">
+                                <h3>Activos</h3>
+                                <p class="stat-value" id="activeStudents">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-enrolled"></div>
+                            <div class="stat-info">
+                                <h3>Matriculados</h3>
+                                <p class="stat-value" id="enrolledStudents">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <h3>Estado del Sistema</h3>
+                            <div class="system-status">
+                                <div class="status-item">
+                                    <span class="status-label">Base de Datos:</span>
+                                    <span class="status-value operational">Operativo</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">Servidor:</span>
+                                    <span class="status-value operational">Operativo</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">API IA:</span>
+                                    <span class="status-value operational">Operativo</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">Servicio SMS:</span>
+                                    <span class="status-value operational">Operativo</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Acciones Rápidas</h3>
+                            <div class="quick-actions">
+                                <button class="btn btn-primary" data-action="add-student">
+                                    <i class="icon-plus"></i> Agregar Estudiante
+                                </button>
+                                <button class="btn btn-secondary" data-action="view-queue">
+                                    <i class="icon-eye"></i> Ver Cola
+                                </button>
+                                <button class="btn btn-secondary" data-action="generate-report">
+                                    <i class="icon-file"></i> Generar Reporte
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Students Management Section -->
+                <section id="studentsSection" class="dashboard-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Gestión de Estudiantes</h3>
+                            <button id="addStudentBtn" class="btn btn-primary">
+                                <i class="icon-plus"></i> Nuevo Estudiante
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Programa</th>
+                                        <th>Semestre</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studentsTableBody">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Curricula Management Section -->
+                <section id="curriculaSection" class="dashboard-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Gestión de Mallas Curriculares</h3>
+                            <button id="addCurriculumBtn" class="btn btn-primary">
+                                <i class="icon-plus"></i> Nueva Malla
+                            </button>
+                        </div>
+                        <div id="curriculaList" class="curricula-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Courses Management Section -->
+                <section id="coursesSection" class="dashboard-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Gestión de Cursos y Cupos</h3>
+                            <button id="addCourseBtn" class="btn btn-primary">
+                                <i class="icon-plus"></i> Nuevo Curso
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Materia</th>
+                                        <th>Grupo</th>
+                                        <th>Docente</th>
+                                        <th>Cupos</th>
+                                        <th>Matriculados</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="coursesTableBody">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Queue Management Section -->
+                <section id="queueManagementSection" class="dashboard-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Gestión de Colas de Espera</h3>
+                            <div class="queue-controls">
+                                <button id="startQueueBtn" class="btn btn-success">
+                                    <i class="icon-play"></i> Iniciar Cola
+                                </button>
+                                <button id="stopQueueBtn" class="btn btn-danger">
+                                    <i class="icon-stop"></i> Detener Cola
+                                </button>
+                                <button id="resetQueueBtn" class="btn btn-warning">
+                                    <i class="icon-refresh"></i> Reiniciar Cola
+                                </button>
+                            </div>
+                        </div>
+                        <div class="queue-statistics">
+                            <div class="stat-item">
+                                <span class="stat-label">Lote Actual:</span>
+                                <span class="stat-value" id="currentBatch">1</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">En Espera:</span>
+                                <span class="stat-value" id="waitingCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Activos:</span>
+                                <span class="stat-value" id="activeCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Completados:</span>
+                                <span class="stat-value" id="completedCount">0</span>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Estudiante</th>
+                                        <th>Lote</th>
+                                        <th>Posición</th>
+                                        <th>Estado</th>
+                                        <th>Tiempo en Cola</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="queueTableBody">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports Section -->
+                <section id="reportsSection" class="dashboard-section">
+                    <div class="card">
+                        <h3>Generación de Reportes</h3>
+                        <div class="report-filters">
+                            <div class="form-group">
+                                <label>Tipo de Reporte</label>
+                                <select id="reportType">
+                                    <option value="enrollment">Reporte de Matrícula</option>
+                                    <option value="academic">Reporte Académico</option>
+                                    <option value="queue">Reporte de Colas</option>
+                                    <option value="performance">Reporte de Rendimiento</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Período</label>
+                                <select id="reportPeriod">
+                                    <option value="current">Semestre Actual</option>
+                                    <option value="last">Semestre Anterior</option>
+                                    <option value="year">Año Actual</option>
+                                    <option value="custom">Personalizado</option>
+                                </select>
+                            </div>
+                            <button id="generateReportBtn" class="btn btn-primary">
+                                <i class="icon-file"></i> Generar Reporte
+                            </button>
+                        </div>
+                        <div id="reportResults" class="report-results">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Monitoring Section -->
+                <section id="monitoringSection" class="dashboard-section">
+                    <div class="card">
+                        <h3>Monitoreo del Sistema</h3>
+                        <div class="monitoring-metrics">
+                            <div class="metric-card">
+                                <h4>Carga del Servidor</h4>
+                                <div class="metric-value" id="serverLoad">0%</div>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="serverLoadBar"></div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Memoria</h4>
+                                <div class="metric-value" id="memoryUsage">0 MB</div>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="memoryBar"></div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Concurrencia</h4>
+                                <div class="metric-value" id="concurrency">0 usuarios</div>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="concurrencyBar"></div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Tiempo de Respuesta</h4>
+                                <div class="metric-value" id="responseTime">0 ms</div>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="responseTimeBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Logs del Sistema</h3>
+                        <div id="systemLogs" class="system-logs">
+                            <div class="log-entry info">
+                                <span class="log-time">2026-09-07 09:30:00</span>
+                                <span class="log-level">INFO</span>
+                                <span class="log-message">Sistema iniciado correctamente</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for adding student -->
+    <div id="studentModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="studentModalTitle">Agregar Estudiante</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="studentForm">
+                    <div class="form-group">
+                        <label for="studentDocument">Documento</label>
+                        <input type="text" id="studentDocument" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentName">Nombre Completo</label>
+                        <input type="text" id="studentName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentEmail">Correo Electrónico</label>
+                        <input type="email" id="studentEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentPhone">Teléfono</label>
+                        <input type="tel" id="studentPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentProgram">Programa</label>
+                        <input type="text" id="studentProgram" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentSemester">Semestre</label>
+                        <input type="number" id="studentSemester" min="1" max="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentPassword">Contraseña</label>
+                        <input type="password" id="studentPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Assets/js/admin-dashboard.js"></script>
+</body>
+</html>

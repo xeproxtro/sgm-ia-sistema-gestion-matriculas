@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Gestión de Administradores</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+    <link rel="stylesheet" href="/Assets/css/superadmin.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+                <span class="superadmin-badge">Super Admin</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/superadmin-dashboard.html">
+                    <i class="icon-home"></i> Volver al Dashboard
+                </a></li>
+                <li><a href="/superadmin/admin-management.html" class="active">
+                    <i class="icon-shield"></i> Gestión Administradores
+                </a></li>
+                <li><a href="/superadmin/system-maintenance.html">
+                    <i class="icon-tools"></i> Mantenimiento
+                </a></li>
+                <li><a href="/superadmin/system-audit.html">
+                    <i class="icon-audit"></i> Auditoría
+                </a></li>
+                <li><a href="/superadmin/portal-inspection.html">
+                    <i class="icon-eye"></i> Inspección de Portales
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar superadmin-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="superadminName">Super Administrador</p>
+                        <p class="user-role">Super Admin</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Gestión de Administradores del Sistema</h1>
+                <div class="user-status">
+                    <span class="status-indicator online"></span>
+                    <span id="currentDate"></span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Estadísticas de Administradores -->
+                <section class="card admin-stats-card">
+                    <h2>Estadísticas de Administradores</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalAdmins">0</span>
+                            <span class="stat-label">Total Administradores</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="activeAdmins">0</span>
+                            <span class="stat-label">Administradores Activos</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="inactiveAdmins">0</span>
+                            <span class="stat-label">Administradores Inactivos</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="recentLogins">0</span>
+                            <span class="stat-label">Logins Recientes (24h)</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lista de Administradores -->
+                <section class="card admins-list-card">
+                    <div class="section-header">
+                        <h2>Listado de Administradores</h2>
+                        <button id="addAdminBtn" class="btn btn-success">
+                            <i class="icon-plus"></i> Agregar Administrador
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Documento</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Último Login</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminsTableBody">
+                                <!-- Se cargarán dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Permisos por Administrador -->
+                <section class="card permissions-card">
+                    <h2>Configuración de Permisos</h2>
+                    <div class="permissions-container">
+                        <div class="permission-group">
+                            <h3>Permisos Globales</h3>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="permManageStudents" checked>
+                                    Gestionar Estudiantes
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="permManageCurricula" checked>
+                                    Gestionar Mallas Curriculares
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="permManageCourses" checked>
+                                    Gestionar Cursos
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="permManageQueue" checked>
+                                    Gestionar Colas
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="permGenerateReports" checked>
+                                    Generar Reportes
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="permission-group">
+                            <h3>Permisos de Sistema</h3>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="permMaintenance">
+                                    Activar Modo Mantenimiento
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="permSystemLogs">
+                                    Acceder a Logs del Sistema
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="permAudit">
+                                    Acceder a Auditoría
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="savePermissionsBtn" class="btn btn-primary btn-block">Guardar Permisos</button>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Agregar Administrador -->
+    <div id="adminModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Agregar Administrador</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="adminForm">
+                    <div class="form-group">
+                        <label for="documentNumber">Documento de Identidad *</label>
+                        <input type="text" id="documentNumber" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">Nombre Completo *</label>
+                        <input type="text" id="fullName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico *</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Teléfono *</label>
+                        <input type="text" id="phone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña Temporal *</label>
+                        <input type="password" id="password" class="form-control" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Assets/js/superadmin-admins.js"></script>
+</body>
+</html>

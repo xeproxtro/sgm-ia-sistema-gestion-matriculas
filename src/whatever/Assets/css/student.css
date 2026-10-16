@@ -1,0 +1,602 @@
+/* Student Portal Specific Styles */
+
+/* Enrollment Process Styles */
+.enrollment-process-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.queue-position {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem;
+    background: linear-gradient(135deg, #90EE90, #76c976);
+    border-radius: var(--radius-lg);
+    color: #343a40;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.queue-position h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.queue-position .position-number {
+    font-size: 3rem;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1rem 2rem;
+    border-radius: var(--radius-lg);
+}
+
+.subject-selection {
+    margin-top: 2rem;
+}
+
+.subject-selection-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.subject-selection-header h3 {
+    margin: 0;
+    color: var(--dark-color);
+    font-size: 1.5rem;
+}
+
+.enrollment-summary {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-top: 2rem;
+    border: 2px solid var(--border-color);
+}
+
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.summary-header h3 {
+    margin: 0;
+    color: var(--dark-color);
+    font-size: 1.5rem;
+}
+
+.summary-total {
+    text-align: right;
+}
+
+.summary-total .credits {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.summary-total .credits-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--dark-color);
+}
+
+.selected-subjects {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.selected-subject-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--light-color);
+    border-radius: var(--radius);
+    border-left: 4px solid #90EE90;
+}
+
+.selected-subject-item .subject-info h4 {
+    margin: 0 0 0.25rem 0;
+    color: var(--dark-color);
+    font-weight: 600;
+}
+
+.selected-subject-item .subject-info p {
+    margin: 0;
+    color: var(--gray-color);
+    font-size: 0.9rem;
+}
+
+.selected-subject-item .remove-btn {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.selected-subject-item .remove-btn:hover {
+    background-color: #d32f2f;
+    transform: scale(1.05);
+}
+
+.otp-verification {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--light-color), var(--lighter-color));
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border-color);
+}
+
+.otp-verification h3 {
+    margin: 0 0 1rem 0;
+    color: var(--dark-color);
+    font-size: 1.5rem;
+}
+
+.otp-verification p {
+    margin-bottom: 1.5rem;
+    color: var(--gray-color);
+}
+
+.otp-input-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.otp-input-group input {
+    flex: 1;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.5rem;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    transition: all 0.3s ease;
+}
+
+.otp-input-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(144, 238, 144, 0.15);
+}
+
+.otp-timer {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--gray-color);
+    font-size: 0.9rem;
+}
+
+.otp-timer .timer-value {
+    font-weight: 700;
+    color: #90EE90;
+    font-size: 1.25rem;
+}
+
+/* AI Schedule Styles */
+.ai-schedule-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.ai-preferences {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    border: 2px solid var(--border-color);
+}
+
+.ai-preferences h3 {
+    margin: 0 0 1.5rem 0;
+    color: var(--dark-color);
+    font-size: 1.5rem;
+}
+
+.preferences-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.preference-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.preference-item label {
+    font-weight: 600;
+    color: var(--dark-color);
+    font-size: 0.9rem;
+}
+
+.preference-item select,
+.preference-item input {
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.preference-item select:focus,
+.preference-item input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(139, 195, 74, 0.15);
+}
+
+.ai-chat {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border-color);
+}
+
+.ai-chat h3 {
+    margin: 0 0 1.5rem 0;
+    color: var(--dark-color);
+    font-size: 1.5rem;
+}
+
+.chat-messages {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: var(--light-color);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+}
+
+.chat-message {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: var(--radius);
+    max-width: 80%;
+}
+
+.chat-message.user {
+    background-color: #90EE90;
+    color: #343a40;
+    margin-left: auto;
+}
+
+.chat-message.ai {
+    background-color: white;
+    color: var(--dark-color);
+    border: 1px solid var(--border-color);
+    margin-right: auto;
+}
+
+.chat-message .message-sender {
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.chat-message .message-content {
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.chat-input {
+    display: flex;
+    gap: 1rem;
+}
+
+.chat-input textarea {
+    flex: 1;
+    min-height: 80px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.chat-input textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(144, 238, 144, 0.15);
+}
+
+.schedule-suggestions {
+    margin-top: 2rem;
+}
+
+.schedule-suggestions h3 {
+    margin: 0 0 1.5rem 0;
+    color: var(--dark-color);
+    font-size: 1.5rem;
+}
+
+.suggestion-card {
+    background-color: white;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.suggestion-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+}
+
+.suggestion-card h4 {
+    margin: 0 0 1rem 0;
+    color: #90EE90;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.suggestion-card .schedule-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.suggestion-card .schedule-details p {
+    margin: 0;
+    color: var(--gray-color);
+    font-size: 0.9rem;
+}
+
+.suggestion-card .schedule-details span {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.suggestion-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* Academic History Styles */
+.academic-history-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.academic-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.overview-card {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.overview-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+
+.overview-card h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--gray-color);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.overview-card .value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--dark-color);
+    background: linear-gradient(135deg, var(--dark-color), var(--gray-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.overview-card .label {
+    margin-top: 0.5rem;
+    color: var(--gray-color);
+    font-size: 0.9rem;
+}
+
+.curriculum-progress {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    border: 2px solid var(--border-color);
+}
+
+.curriculum-progress h3 {
+    margin: 0 0 1.5rem 0;
+    color: var(--dark-color);
+    font-size: 1.5rem;
+}
+
+.progress-overview {
+    margin-bottom: 2rem;
+}
+
+.progress-overview .progress-bar {
+    height: 16px;
+    background-color: var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.progress-overview .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #90EE90, #b8f5b8);
+    border-radius: 8px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-overview .progress-text {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #90EE90;
+}
+
+.semester-progress {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.semester-item {
+    padding: 1rem;
+    background-color: var(--light-color);
+    border-radius: var(--radius);
+    border-left: 4px solid #90EE90;
+}
+
+.semester-item h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--dark-color);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.semester-item .progress {
+    font-size: 0.9rem;
+    color: var(--gray-color);
+}
+
+.semester-item .progress-value {
+    font-weight: 700;
+    color: #90EE90;
+}
+
+.history-table-container {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border-color);
+}
+
+.history-table-container h3 {
+    margin: 0 0 1.5rem 0;
+    color: var(--dark-color);
+    font-size: 1.5rem;
+}
+
+.priority-subjects {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-top: 2rem;
+    border: 2px solid var(--border-color);
+}
+
+.priority-subjects h3 {
+    margin: 0 0 1.5rem 0;
+    color: var(--dark-color);
+    font-size: 1.5rem;
+}
+
+.priority-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.priority-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, rgba(229, 115, 115, 0.1), rgba(229, 115, 115, 0.05));
+    border-radius: var(--radius);
+    border-left: 4px solid var(--danger-color);
+    transition: all 0.3s ease;
+}
+
+.priority-item:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-sm);
+}
+
+.priority-item .subject-info h4 {
+    margin: 0 0 0.25rem 0;
+    color: var(--dark-color);
+    font-weight: 600;
+}
+
+.priority-item .subject-info p {
+    margin: 0;
+    color: var(--gray-color);
+    font-size: 0.9rem;
+}
+
+.priority-item .priority-badge {
+    background-color: var(--danger-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .queue-position {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .queue-position .position-number {
+        font-size: 2rem;
+    }
+    
+    .preferences-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .chat-input {
+        flex-direction: column;
+    }
+    
+    .suggestion-actions {
+        flex-direction: column;
+    }
+    
+    .suggestion-actions .btn {
+        width: 100%;
+    }
+}

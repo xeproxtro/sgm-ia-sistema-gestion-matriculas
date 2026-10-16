@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Panel de Estudiante</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="#" data-section="overview" class="active">
+                    <i class="icon-home"></i> Inicio
+                </a></li>
+                <li><a href="#" data-section="enrollment">
+                    <i class="icon-book"></i> Proceso de Matrícula
+                </a></li>
+                <li><a href="#" data-section="schedule">
+                    <i class="icon-calendar"></i> Mi Horario
+                </a></li>
+                <li><a href="#" data-section="aiAssistant">
+                    <i class="icon-brain"></i> Asistente IA
+                </a></li>
+                <li><a href="#" data-section="history">
+                    <i class="icon-history"></i> Historial Académico
+                </a></li>
+                <li><a href="#" data-section="curriculum">
+                    <i class="icon-curriculum"></i> Malla Curricular
+                </a></li>
+                <li><a href="#" data-section="electives">
+                    <i class="icon-electives"></i> Electivas y Optativas
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="studentName">Estudiante</p>
+                        <p class="user-program" id="studentProgram">Programa</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1 id="pageTitle">Panel de Estudiante</h1>
+                <div class="top-bar-actions">
+                    <div class="notification-bell">
+                        <i class="icon-bell"></i>
+                        <span class="notification-count">3</span>
+                    </div>
+                    <div class="maintenance-status" id="maintenanceStatus">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Sistema Operativo</span>
+                    </div>
+                </div>
+            </header>
+
+            <div id="contentArea" class="content-area">
+                <!-- Overview Section -->
+                <section id="overviewSection" class="dashboard-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon icon-credits"></div>
+                            <div class="stat-info">
+                                <h3>Créditos Completados</h3>
+                                <p class="stat-value" id="totalCredits">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-gpa"></div>
+                            <div class="stat-info">
+                                <h3>Promedio (GPA)</h3>
+                                <p class="stat-value" id="gpa">0.0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-semester"></div>
+                            <div class="stat-info">
+                                <h3>Semestre Actual</h3>
+                                <p class="stat-value" id="currentSemester">1</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-pending"></div>
+                            <div class="stat-info">
+                                <h3>Materias Pendientes</h3>
+                                <p class="stat-value" id="pendingSubjects">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <h3>Estado de Matrícula</h3>
+                            <div id="enrollmentStatus" class="enrollment-status">
+                                <div class="status-indicator waiting"></div>
+                                <p>En cola de espera</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Próximas Acciones</h3>
+                            <ul class="action-list">
+                                <li>Verificar posición en cola</li>
+                                <li>Consultar malla curricular</li>
+                                <li>Explorar materias electivas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Queue Section -->
+                <section id="queueSection" class="dashboard-section">
+                    <div class="card">
+                        <h3>Estado en Cola de Espera</h3>
+                        <div id="queueStatus" class="queue-status">
+                            <div class="queue-info">
+                                <p>Lote: <span id="batchNumber">-</span></p>
+                                <p>Posición: <span id="queuePosition">-</span></p>
+                                <p>Estado: <span id="queueStatusText">-</span></p>
+                            </div>
+                            <div class="queue-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="queueProgress"></div>
+                                </div>
+                                <p class="progress-text" id="queueProgressText">0%</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Schedule Section -->
+                <section id="scheduleSection" class="dashboard-section">
+                    <div class="card">
+                        <h3>Mi Horario</h3>
+                        <div id="scheduleView" class="schedule-view">
+                            <!-- Dynamic schedule content -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Enrollment Section -->
+                <section id="enrollmentSection" class="dashboard-section">
+                    <div class="card">
+                        <h3>Materias Disponibles</h3>
+                        <div id="availableSubjects" class="subjects-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AI Assistant Section -->
+                <section id="aiAssistantSection" class="dashboard-section">
+                    <div class="card">
+                        <h3>Asistente de Inteligencia Artificial</h3>
+                        <div class="ai-chat-container">
+                            <div class="ai-chat-messages" id="aiChatMessages">
+                                <div class="ai-message system">
+                                    <div class="ai-message-content">
+                                        <p>👋 Hola, soy tu asistente académico con IA. Estoy aquí para ayudarte con:</p>
+                                        <ul>
+                                            <li>Recomendaciones de materias</li>
+                                            <li>Optimización de horarios</li>
+                                            <li>Consejos académicos personalizados</li>
+                                            <li>Planificación de tu carrera</li>
+                                        </ul>
+                                        <p>¿En qué puedo ayudarte hoy?</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ai-chat-input">
+                                <textarea id="aiQuery" placeholder="Escribe tu consulta aquí..." rows="3"></textarea>
+                                <button id="askAI" class="btn btn-primary">
+                                    <span class="btn-icon">💬</span>
+                                    Enviar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Curriculum Section -->
+                <section id="curriculumSection" class="dashboard-section">
+                    <div class="card">
+                        <h3>Malla Curricular</h3>
+                        <div id="curriculumView" class="curriculum-view">
+                            <!-- Dynamic curriculum content -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- History Section -->
+                <section id="historySection" class="dashboard-section">
+                    <div class="card">
+                        <h3>Historial Académico</h3>
+                        <div id="academicHistory" class="academic-history">
+                            <table class="history-table">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Materia</th>
+                                        <th>Créditos</th>
+                                        <th>Semestre</th>
+                                        <th>Estado</th>
+                                        <th>Nota</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="historyTableBody">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Electives Section -->
+                <section id="electivesSection" class="dashboard-section">
+                    <div class="card">
+                        <h3>Banco de Electivas y Optativas</h3>
+                        <div class="electives-filters">
+                            <input type="text" id="electiveSearch" placeholder="Buscar electivas...">
+                            <select id="electiveType">
+                                <option value="all">Todos los tipos</option>
+                                <option value="elective">Electivas</option>
+                                <option value="optional">Optativas</option>
+                            </select>
+                        </div>
+                        <div id="electivesList" class="electives-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="/Assets/js/student-dashboard.js"></script>
+</body>
+</html>

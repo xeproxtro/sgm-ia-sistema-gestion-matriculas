@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Monitoreo de Colas</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+    <link rel="stylesheet" href="/Assets/css/admin.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+                <span class="admin-badge">Administrador</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/admin-dashboard.html">
+                    <i class="icon-home"></i> Volver al Dashboard
+                </a></li>
+                <li><a href="/admin/students-management.html">
+                    <i class="icon-users"></i> Gestión Estudiantes
+                </a></li>
+                <li><a href="/admin/curricula-management.html">
+                    <i class="icon-graduation"></i> Mallas Curriculares
+                </a></li>
+                <li><a href="/admin/queue-monitoring.html" class="active">
+                    <i class="icon-clock"></i> Monitoreo de Colas
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar admin-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="adminName">Administrador</p>
+                        <p class="user-role">Admin</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Monitoreo de Colas de Matrícula</h1>
+                <div class="user-status">
+                    <span class="status-indicator online"></span>
+                    <span id="currentDate"></span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Control de Colas -->
+                <section class="card queue-control-card">
+                    <h2>Control de Procesamiento de Colas</h2>
+                    <div class="queue-controls">
+                        <div class="control-group">
+                            <span class="control-label">Estado del Sistema:</span>
+                            <span class="status-badge" id="queueSystemStatus">Activo</span>
+                        </div>
+                        <div class="control-group">
+                            <span class="control-label">Tamaño de Lote:</span>
+                            <span class="control-value">200 estudiantes</span>
+                        </div>
+                        <div class="control-buttons">
+                            <button id="startQueueBtn" class="btn btn-success">
+                                <i class="icon-play"></i> Iniciar Procesamiento
+                            </button>
+                            <button id="stopQueueBtn" class="btn btn-danger">
+                                <i class="icon-stop"></i> Detener Procesamiento
+                            </button>
+                            <button id="resetQueueBtn" class="btn btn-warning">
+                                <i class="icon-refresh"></i> Reiniciar Cola
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Estadísticas de Colas -->
+                <section class="card queue-stats-card">
+                    <h2>Estadísticas en Tiempo Real</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-value" id="waitingCount">0</span>
+                            <span class="stat-label">En Espera</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="activeCount">0</span>
+                            <span class="stat-label">Activos</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="completedCount">0</span>
+                            <span class="stat-label">Completados</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="currentBatch">0</span>
+                            <span class="stat-label">Lote Actual</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lista de Estudiantes en Cola -->
+                <section class="card queue-list-card">
+                    <div class="section-header">
+                        <h2>Estudiantes en Cola de Espera</h2>
+                        <div class="filters">
+                            <select id="batchFilter" class="form-control">
+                                <option value="">Todos los lotes</option>
+                                <option value="1">Lote 1</option>
+                                <option value="2">Lote 2</option>
+                                <option value="3">Lote 3</option>
+                            </select>
+                            <select id="statusFilter" class="form-control">
+                                <option value="">Todos los estados</option>
+                                <option value="waiting">Esperando</option>
+                                <option value="active">Activo</option>
+                                <option value="completed">Completado</option>
+                                <option value="expired">Expirado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Posición</th>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Lote</th>
+                                    <th>Posición en Lote</th>
+                                    <th>Prioridad</th>
+                                    <th>Estado</th>
+                                    <th>Hora de Ingreso</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="queueTableBody">
+                                <!-- Se cargarán dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination">
+                        <button class="btn btn-secondary" id="prevPage" disabled>Anterior</button>
+                        <span class="page-info">Página <span id="currentPage">1</span> de <span id="totalPages">1</span></span>
+                        <button class="btn btn-secondary" id="nextPage">Siguiente</button>
+                    </div>
+                </section>
+
+                <!-- Gráfico de Progreso -->
+                <section class="card queue-progress-card">
+                    <h2>Progreso de Procesamiento</h2>
+                    <div class="progress-visualization">
+                        <div class="batch-progress">
+                            <h3>Progreso por Lote</h3>
+                            <div id="batchProgressBars">
+                                <!-- Se generarán dinámicamente -->
+                            </div>
+                        </div>
+                        <div class="overall-progress">
+                            <h3>Progreso General</h3>
+                            <div class="progress-bar-large">
+                                <div class="progress-fill" id="overallProgressFill" style="width: 0%"></div>
+                            </div>
+                            <p class="progress-text"><span id="overallProgressPercent">0</span>% completado</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Log de Eventos -->
+                <section class="card queue-events-card">
+                    <h2>Log de Eventos de Cola</h2>
+                    <div class="events-log" id="eventsLog">
+                        <div class="log-entry info">
+                            <span class="log-time">10:00:00</span>
+                            <span class="log-message">Sistema de colas iniciado</span>
+                        </div>
+                        <div class="log-entry success">
+                            <span class="log-time">10:05:00</span>
+                            <span class="log-message">Lote 1 activado - 200 estudiantes</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="/Assets/js/admin-queue.js"></script>
+</body>
+</html>

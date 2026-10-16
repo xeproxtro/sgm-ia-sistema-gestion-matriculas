@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Mantenimiento del Sistema</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+    <link rel="stylesheet" href="/Assets/css/superadmin.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+                <span class="superadmin-badge">Super Admin</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/superadmin-dashboard.html">
+                    <i class="icon-home"></i> Volver al Dashboard
+                </a></li>
+                <li><a href="/superadmin/admin-management.html">
+                    <i class="icon-shield"></i> Gestión Administradores
+                </a></li>
+                <li><a href="/superadmin/system-maintenance.html" class="active">
+                    <i class="icon-tools"></i> Mantenimiento
+                </a></li>
+                <li><a href="/superadmin/system-audit.html">
+                    <i class="icon-audit"></i> Auditoría
+                </a></li>
+                <li><a href="/superadmin/portal-inspection.html">
+                    <i class="icon-eye"></i> Inspección de Portales
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar superadmin-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="superadminName">Super Administrador</p>
+                        <p class="user-role">Super Admin</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Control de Mantenimiento del Sistema</h1>
+                <div class="user-status">
+                    <span class="status-indicator online"></span>
+                    <span id="currentDate"></span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Estado Actual del Sistema -->
+                <section class="card system-status-card">
+                    <h2>Estado Actual del Sistema</h2>
+                    <div class="status-overview">
+                        <div class="status-item">
+                            <span class="status-label">Modo Mantenimiento:</span>
+                            <span class="status-badge" id="maintenanceStatus">INACTIVO</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Mensaje Actual:</span>
+                            <span class="status-value" id="maintenanceMessage">Sistema operativo normal</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Uptime:</span>
+                            <span class="status-value" id="systemUptime">24h 30m</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Último Backup:</span>
+                            <span class="status-value" id="lastBackup">2026-09-07 06:00:00</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Control de Mantenimiento -->
+                <section class="card maintenance-control-card">
+                    <h2>Control de Modo Mantenimiento</h2>
+                    <div class="maintenance-controls">
+                        <div class="control-group">
+                            <label class="toggle-label">
+                                <input type="checkbox" id="maintenanceToggle">
+                                <span class="toggle-slider"></span>
+                                <span>Activar Modo Mantenimiento</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="maintenanceMessageInput">Mensaje de Mantenimiento:</label>
+                            <input type="text" id="maintenanceMessageInput" class="form-control" 
+                                   placeholder="Mensaje que verán los usuarios durante mantenimiento"
+                                   value="Sistema en mantenimiento por actualización">
+                        </div>
+
+                        <div class="control-buttons">
+                            <button id="activateMaintenanceBtn" class="btn btn-warning">
+                                <i class="icon-tools"></i> Activar Mantenimiento
+                            </button>
+                            <button id="deactivateMaintenanceBtn" class="btn btn-success">
+                                <i class="icon-check"></i> Desactivar Mantenimiento
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Programación de Mantenimiento -->
+                <section class="card maintenance-schedule-card">
+                    <h2>Programación de Mantenimiento</h2>
+                    <div class="schedule-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="scheduleDate">Fecha:</label>
+                                <input type="date" id="scheduleDate" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="scheduleTime">Hora:</label>
+                                <input type="time" id="scheduleTime" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="scheduleDuration">Duración (minutos):</label>
+                                <input type="number" id="scheduleDuration" class="form-control" 
+                                       value="30" min="5" max="120">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="scheduleMessage">Mensaje Programado:</label>
+                            <input type="text" id="scheduleMessage" class="form-control" 
+                                   placeholder="Mensaje para el mantenimiento programado">
+                        </div>
+                        <button id="scheduleMaintenanceBtn" class="btn btn-primary">
+                            <i class="icon-calendar"></i> Programar Mantenimiento
+                        </button>
+                    </div>
+
+                    <div class="scheduled-maintenance-list">
+                        <h3>Mantenimientos Programados</h3>
+                        <div id="scheduledList" class="scheduled-list">
+                            <div class="scheduled-item">
+                                <div class="scheduled-info">
+                                    <span class="scheduled-date">2026-09-10 02:00</span>
+                                    <span class="scheduled-duration">30 minutos</span>
+                                    <span class="scheduled-message">Actualización de seguridad</span>
+                                </div>
+                                <button class="btn btn-danger btn-sm">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Operaciones de Sistema -->
+                <section class="card system-operations-card">
+                    <h2>Operaciones de Sistema</h2>
+                    <div class="operations-grid">
+                        <div class="operation-item">
+                            <div class="operation-icon">💾</div>
+                            <h3>Backup de Base de Datos</h3>
+                            <p>Crear copia de seguridad completa de la base de datos</p>
+                            <button id="backupBtn" class="btn btn-primary">
+                                <i class="icon-download"></i> Realizar Backup
+                            </button>
+                        </div>
+                        <div class="operation-item">
+                            <div class="operation-icon">🔄</div>
+                            <h3>Reiniciar Servicios</h3>
+                            <p>Reiniciar servicios del sistema (cola, IA, etc.)</p>
+                            <button id="restartServicesBtn" class="btn btn-warning">
+                                <i class="icon-refresh"></i> Reiniciar Servicios
+                            </button>
+                        </div>
+                        <div class="operation-item">
+                            <div class="operation-icon">🧹</div>
+                            <h3>Limpiar Caché</h3>
+                            <p>Limpiar caché del sistema y sesiones expiradas</p>
+                            <button id="clearCacheBtn" class="btn btn-secondary">
+                                <i class="icon-trash"></i> Limpiar Caché
+                            </button>
+                        </div>
+                        <div class="operation-item danger">
+                            <div class="operation-icon">🛑</div>
+                            <h3>Parada de Emergencia</h3>
+                            <p>Detener todos los servicios inmediatamente</p>
+                            <button id="emergencyStopBtn" class="btn btn-danger">
+                                <i class="icon-stop"></i> Parada de Emergencia
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Logs de Mantenimiento -->
+                <section class="card maintenance-logs-card">
+                    <h2>Historial de Mantenimiento</h2>
+                    <div class="logs-container" id="maintenanceLogs">
+                        <div class="log-entry info">
+                            <span class="log-time">2026-09-07 06:00:00</span>
+                            <span class="log-action">BACKUP_COMPLETADO</span>
+                            <span class="log-message">Backup automático realizado exitosamente</span>
+                        </div>
+                        <div class="log-entry warning">
+                            <span class="log-time">2026-09-06 14:30:00</span>
+                            <span class="log-action">MANTENIMIENTO_ACTIVADO</span>
+                            <span class="log-message">Modo mantenimiento activado por actualización</span>
+                        </div>
+                        <div class="log-entry success">
+                            <span class="log-time">2026-09-06 15:00:00</span>
+                            <span class="log-action">MANTENIMIENTO_DESACTIVADO</span>
+                            <span class="log-message">Sistema restaurado a operación normal</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="/Assets/js/superadmin-maintenance.js"></script>
+</body>
+</html>

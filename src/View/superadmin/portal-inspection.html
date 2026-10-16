@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Inspección de Portales</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+    <link rel="stylesheet" href="/Assets/css/superadmin.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+                <span class="superadmin-badge">Super Admin</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/superadmin-dashboard.html">
+                    <i class="icon-home"></i> Volver al Dashboard
+                </a></li>
+                <li><a href="/superadmin/admin-management.html">
+                    <i class="icon-shield"></i> Gestión Administradores
+                </a></li>
+                <li><a href="/superadmin/system-maintenance.html">
+                    <i class="icon-tools"></i> Mantenimiento
+                </a></li>
+                <li><a href="/superadmin/system-audit.html">
+                    <i class="icon-audit"></i> Auditoría
+                </a></li>
+                <li><a href="/superadmin/portal-inspection.html" class="active">
+                    <i class="icon-eye"></i> Inspección de Portales
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar superadmin-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="superadminName">Super Administrador</p>
+                        <p class="user-role">Super Admin</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Inspección de Portales (Modo Solo Lectura)</h1>
+                <div class="user-status">
+                    <span class="status-indicator online"></span>
+                    <span id="currentDate"></span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Aviso de Modo Inspección -->
+                <section class="card inspection-warning-card">
+                    <div class="warning-content">
+                        <div class="warning-icon">👁️</div>
+                        <div class="warning-text">
+                            <h3>Modo de Inspección Activo</h3>
+                            <p>Estás visualizando los portales de otros roles en <strong>modo solo lectura</strong>. No puedes realizar cambios ni transacciones en nombre de otros usuarios. Esta vista es exclusivamente para fines de auditoría y monitoreo.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Selección de Portal a Inspeccionar -->
+                <section class="card portal-selection-card">
+                    <h2>Seleccionar Portal para Inspeccionar</h2>
+                    <div class="portal-options">
+                        <button class="portal-option" data-portal="student">
+                            <div class="portal-icon">👨‍🎓</div>
+                            <div class="portal-info">
+                                <h3>Portal de Estudiantes</h3>
+                                <p>Visualizar el dashboard y páginas de estudiantes</p>
+                            </div>
+                            <div class="portal-arrow">→</div>
+                        </button>
+                        <button class="portal-option" data-portal="admin">
+                            <div class="portal-icon">👨‍💼</div>
+                            <div class="portal-info">
+                                <h3>Portal de Administradores</h3>
+                                <p>Visualizar el dashboard y páginas de administradores</p>
+                            </div>
+                            <div class="portal-arrow">→</div>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Vista de Inspección (Iframe) -->
+                <section class="card inspection-view-card" id="inspectionViewCard" style="display: none;">
+                    <div class="inspection-header">
+                        <h2 id="inspectionTitle">Vista de Inspección</h2>
+                        <div class="inspection-controls">
+                            <select id="userSelect" class="form-control">
+                                <option value="">Seleccionar usuario específico...</option>
+                                <!-- Se cargarán dinámicamente -->
+                            </select>
+                            <select id="pageSelect" class="form-control">
+                                <option value="dashboard">Dashboard Principal</option>
+                                <!-- Se cargarán según el portal seleccionado -->
+                            </select>
+                            <button id="refreshViewBtn" class="btn btn-secondary">
+                                <i class="icon-refresh"></i> Actualizar
+                            </button>
+                            <button id="closeInspectionBtn" class="btn btn-danger">
+                                <i class="icon-close"></i> Cerrar Vista
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="inspection-toolbar">
+                        <div class="toolbar-info">
+                            <span class="info-badge">MODO SOLO LECTURA</span>
+                            <span class="info-text">Visualizando: <span id="viewingPortal">--</span></span>
+                            <span class="info-text">Usuario: <span id="viewingUser">--</span></span>
+                        </div>
+                        <div class="toolbar-actions">
+                            <button id="takeSnapshotBtn" class="btn btn-secondary btn-sm">
+                                <i class="icon-camera"></i> Capturar Pantalla
+                            </button>
+                            <button id="exportViewBtn" class="btn btn-secondary btn-sm">
+                                <i class="icon-download"></i> Exportar Vista
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="inspection-frame-container">
+                        <div class="inspection-overlay">
+                            <div class="overlay-message">
+                                <span class="overlay-icon">🔒</span>
+                                <span>Vista de inspección - No interactivo</span>
+                            </div>
+                        </div>
+                        <iframe id="inspectionFrame" class="inspection-frame" src="" sandbox="allow-same-origin allow-scripts"></iframe>
+                    </div>
+                </section>
+
+                <!-- Historial de Inspecciones -->
+                <section class="card inspection-history-card">
+                    <h2>Historial de Inspecciones Recientes</h2>
+                    <div class="inspection-history-list" id="inspectionHistory">
+                        <div class="history-item">
+                            <div class="history-info">
+                                <span class="history-time">2026-09-07 10:30:00</span>
+                                <span class="history-portal">Portal de Estudiantes</span>
+                                <span class="history-user">Usuario: waosmanxd123@gmail.com</span>
+                                <span class="history-page">Página: Proceso de Matrícula</span>
+                            </div>
+                            <span class="history-duration">5 min</span>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-info">
+                                <span class="history-time">2026-09-07 09:15:00</span>
+                                <span class="history-portal">Portal de Administradores</span>
+                                <span class="history-user">Usuario: emmanuelmoreno2t@gmail.com</span>
+                                <span class="history-page">Página: Gestión de Estudiantes</span>
+                            </div>
+                            <span class="history-duration">12 min</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Estadísticas de Inspección -->
+                <section class="card inspection-stats-card">
+                    <h2>Estadísticas de Inspección</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalInspections">0</span>
+                            <span class="stat-label">Inspecciones Totales</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="studentPortalInspections">0</span>
+                            <span class="stat-label">Portal Estudiantes</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="adminPortalInspections">0</span>
+                            <span class="stat-label">Portal Administradores</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="avgInspectionTime">0 min</span>
+                            <span class="stat-label">Tiempo Promedio</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="/Assets/js/superadmin-inspection.js"></script>
+</body>
+</html>

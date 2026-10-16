@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Asistente de Horarios IA</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+    <link rel="stylesheet" href="/Assets/css/student.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+                <span class="student-badge">Estudiante</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/student-dashboard.html">
+                    <i class="icon-home"></i> Volver al Dashboard
+                </a></li>
+                <li><a href="/student/enrollment-process.html">
+                    <i class="icon-book"></i> Matrícula
+                </a></li>
+                <li><a href="/student/ai-schedule.html" class="active">
+                    <i class="icon-brain"></i> Asistente IA
+                </a></li>
+                <li><a href="/student/academic-history.html">
+                    <i class="icon-history"></i> Historial
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="studentName">Estudiante</p>
+                        <p class="user-program" id="studentProgram">Programa</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Asistente de Horarios con Inteligencia Artificial</h1>
+                <div class="user-status">
+                    <span class="status-indicator online"></span>
+                    <span id="currentDate"></span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Preferencias de Horario -->
+                <section class="card preferences-card">
+                    <h2>Configura tus Preferencias</h2>
+                    <div class="preferences-form">
+                        <div class="form-group">
+                            <label>Franjas horarias preferidas:</label>
+                            <div class="time-slots">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="timeSlot" value="08:00-10:00"> 08:00 - 10:00
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="timeSlot" value="10:00-12:00"> 10:00 - 12:00
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="timeSlot" value="14:00-16:00"> 14:00 - 16:00
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="timeSlot" value="16:00-18:00"> 16:00 - 18:00
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="timeSlot" value="18:00-20:00"> 18:00 - 20:00
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Días a evitar:</label>
+                            <div class="days-avoid">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="avoidDay" value="Sábado"> Sábado
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="avoidDay" value="Viernes"> Viernes tarde
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="maxDailyHours">Máximo de horas por día:</label>
+                            <select id="maxDailyHours" class="form-control">
+                                <option value="4">4 horas</option>
+                                <option value="6" selected>6 horas</option>
+                                <option value="8">8 horas</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="optimizationGoal">Objetivo de optimización:</label>
+                            <select id="optimizationGoal" class="form-control">
+                                <option value="balanced" selected>Balanceado</option>
+                                <option value="minimize_days">Minimizar días</option>
+                                <option value="compact_schedule">Horario compacto</option>
+                                <option value="spread_out">Distribuido</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Materias prioritarias:</label>
+                            <div id="prioritySubjects" class="priority-subjects">
+                                <!-- Se cargarán dinámicamente -->
+                            </div>
+                        </div>
+
+                        <button id="generateScheduleBtn" class="btn btn-primary btn-lg">
+                            <i class="icon-brain"></i> Generar Horario Optimizado
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Resultados de IA -->
+                <section class="card ai-results-card" id="aiResultsCard" style="display: none;">
+                    <h2>Sugerencias de Inteligencia Artificial</h2>
+                    <div class="ai-loading" id="aiLoading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Analizando tu historial académico y generando sugerencias...</p>
+                    </div>
+
+                    <div class="ai-suggestions" id="aiSuggestions" style="display: none;">
+                        <div class="suggestion-header">
+                            <h3>Horario Optimizado</h3>
+                            <div class="suggestion-stats">
+                                <span class="stat-badge">Sin cruces</span>
+                                <span class="stat-badge">Sin huecos</span>
+                                <span class="stat-badge">Optimizado</span>
+                            </div>
+                        </div>
+
+                        <div class="schedule-grid" id="scheduleGrid">
+                            <!-- Grid de horario se generará dinámicamente -->
+                        </div>
+
+                        <div class="ai-insights">
+                            <h3>Insights de IA</h3>
+                            <div class="insight-item">
+                                <span class="insight-icon">💡</span>
+                                <p>Basado en tu historial, tienes mayor rendimiento en materias de programación en horarios de la mañana.</p>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-icon">⚠️</span>
+                                <p>Se recomienda priorizar "Bases de Datos" ya que es prerrequisito para materias del próximo semestre.</p>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-icon">✅</span>
+                                <p>Este horario te permite tener viernes libre para actividades extracurriculares.</p>
+                            </div>
+                        </div>
+
+                        <div class="ai-actions">
+                            <button id="applyScheduleBtn" class="btn btn-success">
+                                Aplicar este Horario
+                            </button>
+                            <button id="regenerateBtn" class="btn btn-secondary">
+                                Regenerar
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Chat con IA -->
+                <section class="card ai-chat-card">
+                    <h2>Consultar al Asistente IA</h2>
+                    <div class="chat-container" id="chatContainer">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message ai-message">
+                                <div class="message-content">
+                                    <p>Hola, soy tu asistente académico con IA. Puedo ayudarte a:</p>
+                                    <ul>
+                                        <li>Optimizar tu horario</li>
+                                        <li>Sugerir materias según tu rendimiento</li>
+                                        <li>Recomendar estrategias de estudio</li>
+                                        <li>Analizar tu historial académico</li>
+                                    </ul>
+                                    <p>¿En qué puedo ayudarte hoy?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="chatInput" class="form-control" placeholder="Escribe tu consulta...">
+                            <button id="sendChatBtn" class="btn btn-primary">
+                                <i class="icon-send"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="/Assets/js/student-ai.js"></script>
+</body>
+</html>

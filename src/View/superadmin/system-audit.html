@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Auditoría del Sistema</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+    <link rel="stylesheet" href="/Assets/css/superadmin.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+                <span class="superadmin-badge">Super Admin</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/superadmin-dashboard.html">
+                    <i class="icon-home"></i> Volver al Dashboard
+                </a></li>
+                <li><a href="/superadmin/admin-management.html">
+                    <i class="icon-shield"></i> Gestión Administradores
+                </a></li>
+                <li><a href="/superadmin/system-maintenance.html">
+                    <i class="icon-tools"></i> Mantenimiento
+                </a></li>
+                <li><a href="/superadmin/system-audit.html" class="active">
+                    <i class="icon-audit"></i> Auditoría
+                </a></li>
+                <li><a href="/superadmin/portal-inspection.html">
+                    <i class="icon-eye"></i> Inspección de Portales
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar superadmin-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="superadminName">Super Administrador</p>
+                        <p class="user-role">Super Admin</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Auditoría y Logs del Sistema</h1>
+                <div class="user-status">
+                    <span class="status-indicator online"></span>
+                    <span id="currentDate"></span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Filtros de Auditoría -->
+                <section class="card audit-filters-card">
+                    <h2>Filtros de Auditoría</h2>
+                    <div class="filter-controls">
+                        <div class="form-group">
+                            <label for="actionFilter">Acción:</label>
+                            <select id="actionFilter" class="form-control">
+                                <option value="">Todas las acciones</option>
+                                <option value="LOGIN">Login</option>
+                                <option value="LOGOUT">Logout</option>
+                                <option value="USER_CREATED">Usuario Creado</option>
+                                <option value="USER_UPDATED">Usuario Actualizado</option>
+                                <option value="ENROLLMENT">Matrícula</option>
+                                <option value="QUEUE_JOIN">Ingreso a Cola</option>
+                                <option value="MAINTENANCE">Mantenimiento</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="userFilter">Usuario:</label>
+                            <input type="text" id="userFilter" class="form-control" placeholder="Nombre o email">
+                        </div>
+                        <div class="form-group">
+                            <label for="startDate">Fecha Inicio:</label>
+                            <input type="date" id="startDate" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="endDate">Fecha Fin:</label>
+                            <input type="date" id="endDate" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="statusFilter">Estado:</label>
+                            <select id="statusFilter" class="form-control">
+                                <option value="">Todos los estados</option>
+                                <option value="success">Exitoso</option>
+                                <option value="error">Error</option>
+                                <option value="warning">Advertencia</option>
+                            </select>
+                        </div>
+                        <button id="applyFiltersBtn" class="btn btn-primary">
+                            <i class="icon-filter"></i> Aplicar Filtros
+                        </button>
+                        <button id="clearFiltersBtn" class="btn btn-secondary">
+                            <i class="icon-clear"></i> Limpiar
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Estadísticas de Auditoría -->
+                <section class="card audit-stats-card">
+                    <h2>Estadísticas de Auditoría</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalLogs">0</span>
+                            <span class="stat-label">Total de Logs</span>
+                        </div>
+                        <div class="stat-item success">
+                            <span class="stat-value" id="successLogs">0</span>
+                            <span class="stat-label">Exitosos</span>
+                        </div>
+                        <div class="stat-item error">
+                            <span class="stat-value" id="errorLogs">0</span>
+                            <span class="stat-label">Errores</span>
+                        </div>
+                        <div class="stat-item warning">
+                            <span class="stat-value" id="warningLogs">0</span>
+                            <span class="stat-label">Advertencias</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Logs del Sistema -->
+                <section class="card system-logs-card">
+                    <div class="section-header">
+                        <h2>Logs del Sistema</h2>
+                        <div class="export-buttons">
+                            <button id="exportCSVBtn" class="btn btn-secondary">
+                                <i class="icon-download"></i> Exportar CSV
+                            </button>
+                            <button id="exportJSONBtn" class="btn btn-secondary">
+                                <i class="icon-download"></i> Exportar JSON
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="logs-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Usuario</th>
+                                    <th>Acción</th>
+                                    <th>Entidad</th>
+                                    <th>IP Address</th>
+                                    <th>Estado</th>
+                                    <th>Detalles</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsTableBody">
+                                <!-- Se cargarán dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination">
+                        <button class="btn btn-secondary" id="prevPage" disabled>Anterior</button>
+                        <span class="page-info">Página <span id="currentPage">1</span> de <span id="totalPages">1</span></span>
+                        <button class="btn btn-secondary" id="nextPage">Siguiente</button>
+                    </div>
+                </section>
+
+                <!-- Eventos de Seguridad -->
+                <section class="card security-events-card">
+                    <h2>Eventos de Seguridad</h2>
+                    <div class="security-events-list" id="securityEvents">
+                        <div class="security-event warning">
+                            <div class="event-icon">⚠️</div>
+                            <div class="event-details">
+                                <span class="event-time">2026-09-07 09:45:00</span>
+                                <span class="event-type">INTENTO_FALLIDO_LOGIN</span>
+                                <span class="event-description">Múltiples intentos fallidos desde IP 192.168.1.100</span>
+                            </div>
+                        </div>
+                        <div class="security-event info">
+                            <div class="event-icon">🔒</div>
+                            <div class="event-details">
+                                <span class="event-time">2026-09-07 09:30:00</span>
+                                <span class="event-type">CAMBIO_CONTRASEÑA</span>
+                                <span class="event-description">Usuario emmanuelmoreno@uts.edu.co cambió su contraseña</span>
+                            </div>
+                        </div>
+                        <div class="security-event success">
+                            <div class="event-icon">✅</div>
+                            <div class="event-details">
+                                <span class="event-time">2026-09-07 09:00:00</span>
+                                <span class="event-type">LOGIN_EXITOSO</span>
+                                <span class="event-description">Super Admin inició sesión desde IP 192.168.1.50</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Actividad por Usuario -->
+                <section class="card user-activity-card">
+                    <h2>Actividad por Usuario</h2>
+                    <div class="user-activity-list" id="userActivityList">
+                        <!-- Se cargarán dinámicamente -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Detalles de Log -->
+    <div id="logDetailModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalles del Log</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="log-detail-item">
+                    <span class="detail-label">ID:</span>
+                    <span class="detail-value" id="detailId">--</span>
+                </div>
+                <div class="log-detail-item">
+                    <span class="detail-label">Timestamp:</span>
+                    <span class="detail-value" id="detailTimestamp">--</span>
+                </div>
+                <div class="log-detail-item">
+                    <span class="detail-label">Usuario:</span>
+                    <span class="detail-value" id="detailUser">--</span>
+                </div>
+                <div class="log-detail-item">
+                    <span class="detail-label">Acción:</span>
+                    <span class="detail-value" id="detailAction">--</span>
+                </div>
+                <div class="log-detail-item">
+                    <span class="detail-label">IP Address:</span>
+                    <span class="detail-value" id="detailIP">--</span>
+                </div>
+                <div class="log-detail-item">
+                    <span class="detail-label">User Agent:</span>
+                    <span class="detail-value" id="detailUserAgent">--</span>
+                </div>
+                <div class="log-detail-item">
+                    <span class="detail-label">Estado:</span>
+                    <span class="detail-value" id="detailStatus">--</span>
+                </div>
+                <div class="log-detail-item full-width">
+                    <span class="detail-label">Detalles:</span>
+                    <pre class="detail-json" id="detailJSON">--</pre>
+                </div>
+                <div class="log-detail-item full-width" id="errorMessageContainer" style="display: none;">
+                    <span class="detail-label">Error:</span>
+                    <span class="detail-value error" id="detailError">--</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Assets/js/superadmin-audit.js"></script>
+</body>
+</html>

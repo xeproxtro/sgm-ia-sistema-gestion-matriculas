@@ -1,0 +1,77 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/
+.nyc_output/
+
+# Build outputs
+dist/
+build/
+out/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+tests/coverage/
+.jest/
+
+# Database
+*.sql
+*.sqlite
+*.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Project specific
+src/Assets/images/uts-logo.png
+*.backup
+
+# Docker
+docker-compose.override.yml
+
+# Kubernetes
+k8s_join_command.sh
+
+# Ansible
+ansible_facts/
+/tmp/ansible_facts/
+
+# Volume data
+uploads/
+

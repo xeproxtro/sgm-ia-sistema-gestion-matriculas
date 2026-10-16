@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Gestión de Estudiantes</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+    <link rel="stylesheet" href="/Assets/css/admin.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+                <span class="admin-badge">Administrador</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/admin-dashboard.html">
+                    <i class="icon-home"></i> Volver al Dashboard
+                </a></li>
+                <li><a href="/admin/students-management.html" class="active">
+                    <i class="icon-users"></i> Gestión Estudiantes
+                </a></li>
+                <li><a href="/admin/curricula-management.html">
+                    <i class="icon-graduation"></i> Mallas Curriculares
+                </a></li>
+                <li><a href="/admin/queue-monitoring.html">
+                    <i class="icon-clock"></i> Monitoreo de Colas
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar admin-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="adminName">Administrador</p>
+                        <p class="user-role">Admin</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Gestión de Estudiantes</h1>
+                <div class="user-status">
+                    <span class="status-indicator online"></span>
+                    <span id="currentDate"></span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Estadísticas Rápidas -->
+                <section class="card stats-card">
+                    <h2>Estadísticas de Estudiantes</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalStudents">0</span>
+                            <span class="stat-label">Total Estudiantes</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="activeStudents">0</span>
+                            <span class="stat-label">Estudiantes Activos</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="inQueueStudents">0</span>
+                            <span class="stat-label">En Cola de Espera</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="newThisMonth">0</span>
+                            <span class="stat-label">Nuevos este Mes</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Buscador y Filtros -->
+                <section class="card search-card">
+                    <div class="search-filters">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre, código o documento...">
+                        <select id="programFilter" class="form-control">
+                            <option value="">Todos los programas</option>
+                            <option value="Ingeniería de Sistemas">Ingeniería de Sistemas</option>
+                            <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+                            <option value="Administración">Administración</option>
+                        </select>
+                        <select id="semesterFilter" class="form-control">
+                            <option value="">Todos los semestres</option>
+                            <option value="1">Semestre 1</option>
+                            <option value="2">Semestre 2</option>
+                            <option value="3">Semestre 3</option>
+                            <option value="4">Semestre 4</option>
+                            <option value="5">Semestre 5</option>
+                            <option value="6">Semestre 6+</option>
+                        </select>
+                        <select id="statusFilter" class="form-control">
+                            <option value="">Todos los estados</option>
+                            <option value="active">Activo</option>
+                            <option value="inactive">Inactivo</option>
+                            <option value="graduated">Graduado</option>
+                            <option value="suspended">Suspendido</option>
+                        </select>
+                        <button id="searchBtn" class="btn btn-primary">
+                            <i class="icon-search"></i> Buscar
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Tabla de Estudiantes -->
+                <section class="card students-table-card">
+                    <div class="table-header">
+                        <h2>Listado de Estudiantes</h2>
+                        <button id="addStudentBtn" class="btn btn-success">
+                            <i class="icon-plus"></i> Agregar Estudiante
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Documento</th>
+                                    <th>Programa</th>
+                                    <th>Semestre</th>
+                                    <th>Estado</th>
+                                    <th>Créditos</th>
+                                    <th>Promedio</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody">
+                                <!-- Se cargarán dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination">
+                        <button class="btn btn-secondary" id="prevPage" disabled>Anterior</button>
+                        <span class="page-info">Página <span id="currentPage">1</span> de <span id="totalPages">1</span></span>
+                        <button class="btn btn-secondary" id="nextPage">Siguiente</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Agregar/Editar Estudiante -->
+    <div id="studentModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Agregar Estudiante</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="studentForm">
+                    <div class="form-group">
+                        <label for="documentNumber">Documento de Identidad *</label>
+                        <input type="text" id="documentNumber" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">Nombre Completo *</label>
+                        <input type="text" id="fullName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico *</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Teléfono *</label>
+                        <input type="text" id="phone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="program">Programa Académico *</label>
+                        <select id="program" class="form-control" required>
+                            <option value="">Seleccione programa</option>
+                            <option value="Ingeniería de Sistemas">Ingeniería de Sistemas</option>
+                            <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+                            <option value="Administración">Administración</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="semester">Semestre *</label>
+                        <input type="number" id="semester" class="form-control" min="1" max="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña Temporal *</label>
+                        <input type="password" id="password" class="form-control" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Assets/js/admin-students.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Testing
+coverage
+.nyc_output
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Documentation
+docs
+*.md
+!README.md
+
+# Uploads
+src/whatever/uploads/*
+
+# Logs
+logs
+*.log
+
+# Dev files
+generate-sample-pdfs.js
+seed-database.js
+update-pdfs-in-db.js
+
+# Build artifacts
+dist
+build

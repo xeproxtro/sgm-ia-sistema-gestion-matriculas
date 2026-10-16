@@ -1,0 +1,755 @@
+/* Super Admin Dashboard Specific Styles */
+
+/* Global Status */
+.global-status {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    background-color: white;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border-color);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.status-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow);
+    transform: translateX(5px);
+}
+
+.status-label {
+    font-weight: 600;
+    color: var(--gray-color);
+    font-size: 0.9rem;
+}
+
+.status-value {
+    font-weight: 700;
+    color: var(--dark-color);
+    font-size: 1rem;
+}
+
+.status-value.active {
+    color: var(--success-color);
+}
+
+.status-value.inactive {
+    color: var(--danger-color);
+}
+
+/* Critical Actions */
+.critical-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.critical-actions .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+}
+
+.critical-actions .btn-danger {
+    background: linear-gradient(135deg, var(--danger-color), #d32f2f);
+    color: white;
+    border: none;
+}
+
+.critical-actions .btn-danger:hover {
+    background: linear-gradient(135deg, #d32f2f, #c62828);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+/* Maintenance Indicator */
+.maintenance-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, var(--warning-color), #ffa726);
+    border-radius: 25px;
+    font-size: 0.9rem;
+    color: var(--dark-color);
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+}
+
+.indicator-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #343a40;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+.indicator-text {
+    font-weight: 700;
+}
+
+/* Permissions Container */
+.permissions-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.permission-group {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    border: 2px solid var(--border-color);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.permission-group:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow);
+    transform: translateY(-4px);
+}
+
+.permission-group h4 {
+    margin: 0 0 1.25rem 0;
+    color: #90EE90;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.permission-item {
+    margin-bottom: 1rem;
+}
+
+.permission-item label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--dark-color);
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.permission-item label:hover {
+    color: var(--primary-color);
+}
+
+.permission-item input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    accent-color: var(--primary-color);
+    width: 18px;
+    height: 18px;
+}
+
+/* Maintenance Controls */
+.maintenance-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.maintenance-status {
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.status-indicator .status-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--success-color);
+    box-shadow: 0 0 0 3px rgba(139, 195, 74, 0.2);
+}
+
+.status-indicator.warning .status-dot {
+    background-color: var(--warning-color);
+    box-shadow: 0 0 0 3px rgba(255, 183, 77, 0.2);
+}
+
+.status-indicator.error .status-dot {
+    background-color: var(--danger-color);
+    box-shadow: 0 0 0 3px rgba(229, 115, 115, 0.2);
+}
+
+.status-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.maintenance-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.maintenance-message {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.maintenance-message label {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--dark-color);
+    font-size: 0.9rem;
+}
+
+.maintenance-message textarea {
+    margin-bottom: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.maintenance-message textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(144, 238, 144, 0.15);
+}
+
+.maintenance-schedule {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.maintenance-schedule h4 {
+    margin: 0 0 1.25rem 0;
+    color: #90EE90;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.maintenance-schedule .form-group {
+    margin-bottom: 1rem;
+}
+
+.maintenance-schedule label {
+    font-weight: 600;
+    color: var(--dark-color);
+    font-size: 0.9rem;
+}
+
+.maintenance-schedule input,
+.maintenance-schedule select {
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.maintenance-schedule input:focus,
+.maintenance-schedule select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(144, 238, 144, 0.15);
+}
+
+/* Log Filters */
+.log-filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.log-filters select,
+.log-filters input {
+    flex: 1;
+    min-width: 180px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.log-filters select:focus,
+.log-filters input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(144, 238, 144, 0.15);
+}
+
+/* System Logs Container */
+.system-logs-container {
+    max-height: 550px;
+    overflow-y: auto;
+    background: linear-gradient(180deg, var(--dark-color), var(--darker-color));
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border-color);
+}
+
+.log-entry {
+    display: flex;
+    gap: 1.25rem;
+    padding: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    transition: background-color 0.2s ease;
+}
+
+.log-entry:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.log-entry:last-child {
+    border-bottom: none;
+}
+
+.log-time {
+    color: rgba(255, 255, 255, 0.7);
+    min-width: 160px;
+    font-weight: 500;
+}
+
+.log-level {
+    font-weight: 700;
+    min-width: 70px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.log-entry.error .log-level {
+    color: var(--danger-color);
+}
+
+.log-entry.warn .log-level {
+    color: var(--warning-color);
+}
+
+.log-entry.info .log-level {
+    color: var(--info-color);
+}
+
+.log-entry.debug .log-level {
+    color: var(--gray-color);
+}
+
+.log-entry.security .log-level {
+    color: #ff6b6b;
+}
+
+.log-message {
+    color: rgba(255, 255, 255, 0.9);
+    flex: 1;
+    line-height: 1.5;
+}
+
+/* Audit Filters */
+.audit-filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.audit-filters select,
+.audit-filters input {
+    flex: 1;
+    min-width: 180px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.audit-filters select:focus,
+.audit-filters input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(144, 238, 144, 0.15);
+}
+
+/* Audit Table Enhancements */
+.audit-table .log-level {
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.audit-table .log-level.login {
+    background: linear-gradient(135deg, var(--info-color), #42a5f5);
+    color: white;
+}
+
+.audit-table .log-level.enrollment {
+    background: linear-gradient(135deg, #90EE90, #6aa86a);
+    color: #343a40;
+}
+
+.audit-table .log-level.admin {
+    background: linear-gradient(135deg, var(--warning-color), #ffa726);
+    color: var(--dark-color);
+}
+
+.audit-table .log-level.system {
+    background: linear-gradient(135deg, #90EE90, #76c976);
+    color: #343a40;
+}
+
+.audit-table .log-level.security {
+    background: linear-gradient(135deg, var(--danger-color), #d32f2f);
+    color: white;
+}
+
+/* Admin Management */
+.admin-management-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.admin-card {
+    background-color: white;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow);
+    transform: translateY(-4px);
+}
+
+.admin-card h4 {
+    margin: 0 0 1rem 0;
+    color: var(--dark-color);
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.admin-card .admin-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.admin-card .admin-info p {
+    margin: 0;
+    color: var(--gray-color);
+    font-size: 0.9rem;
+}
+
+.admin-card .admin-info span {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.admin-card .admin-permissions {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: var(--light-color);
+    border-radius: var(--radius);
+}
+
+.admin-card .admin-permissions h5 {
+    margin: 0 0 0.75rem 0;
+    color: var(--dark-color);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.admin-card .admin-permissions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-card .admin-permissions li {
+    padding: 0.25rem 0;
+    color: var(--gray-color);
+    font-size: 0.85rem;
+}
+
+.admin-card .admin-permissions li::before {
+    content: "✓ ";
+    color: var(--success-color);
+    font-weight: 700;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+/* Portal Inspection */
+.inspection-container {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border-color);
+}
+
+.inspection-view-card {
+    min-height: 900px;
+}
+
+.inspection-frame-container {
+    position: relative;
+    height: 850px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background-color: var(--light-color);
+}
+
+.inspection-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.inspection-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.overlay-message {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    border: 2px solid var(--warning-color);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    color: var(--dark-color);
+    box-shadow: var(--shadow);
+}
+
+.overlay-icon {
+    font-size: 1.25rem;
+}
+
+.inspection-warning {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, rgba(255, 183, 77, 0.1), rgba(255, 183, 77, 0.05));
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--warning-color);
+    margin-bottom: 2rem;
+}
+
+.inspection-warning .warning-icon {
+    font-size: 2rem;
+}
+
+.inspection-warning .warning-text h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--dark-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.inspection-warning .warning-text p {
+    margin: 0;
+    color: var(--gray-color);
+    font-size: 0.9rem;
+}
+
+.portal-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.portal-option {
+    padding: 1.25rem;
+    background-color: var(--light-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.portal-option:hover {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, rgba(139, 195, 74, 0.1), rgba(139, 195, 74, 0.05));
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.portal-option.selected {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, #90EE90, #76c976);
+    color: #343a40;
+    box-shadow: var(--shadow);
+}
+
+.portal-option h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.portal-option p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.inspection-iframe {
+    width: 100%;
+    height: 800px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background-color: var(--light-color);
+}
+
+.inspection-history {
+    margin-top: 2rem;
+}
+
+.inspection-history h3 {
+    margin: 0 0 1.5rem 0;
+    color: var(--dark-color);
+    font-size: 1.5rem;
+}
+
+.history-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    background-color: var(--light-color);
+    border-radius: var(--radius);
+    border-left: 4px solid #90EE90;
+    transition: all 0.3s ease;
+}
+
+.history-item:hover {
+    background-color: white;
+    box-shadow: var(--shadow-sm);
+    transform: translateX(5px);
+}
+
+.history-item .history-info h4 {
+    margin: 0 0 0.25rem 0;
+    color: var(--dark-color);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.history-item .history-info p {
+    margin: 0;
+    color: var(--gray-color);
+    font-size: 0.85rem;
+}
+
+.history-item .history-time {
+    color: var(--gray-color);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Responsive Super Admin Dashboard */
+@media (max-width: 768px) {
+    .permissions-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .maintenance-actions {
+        grid-template-columns: 1fr;
+    }
+    
+    .log-filters,
+    .audit-filters {
+        flex-direction: column;
+    }
+    
+    .log-filters select,
+    .log-filters input,
+    .audit-filters select,
+    .audit-filters input {
+        width: 100%;
+    }
+    
+    .admin-management-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .portal-selector {
+        grid-template-columns: 1fr;
+    }
+    
+    .inspection-iframe {
+        height: 500px;
+    }
+    
+    .inspection-frame-container {
+        height: 500px;
+    }
+    
+    .inspection-view-card {
+        min-height: 600px;
+    }
+    
+    .history-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+}

@@ -1,0 +1,6 @@
+# Secrets con valores reales - NO commit
+secret-real.yaml
+secret-local.yaml
+
+# Archivos temporales de kubectl
+*.tmp

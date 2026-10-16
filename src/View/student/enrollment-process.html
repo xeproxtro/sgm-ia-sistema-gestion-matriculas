@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Proceso de Matrícula</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+    <link rel="stylesheet" href="/Assets/css/student.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+                <span class="student-badge">Estudiante</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/student-dashboard.html">
+                    <i class="icon-home"></i> Volver al Dashboard
+                </a></li>
+                <li><a href="/student/enrollment-process.html" class="active">
+                    <i class="icon-book"></i> Matrícula
+                </a></li>
+                <li><a href="/student/ai-schedule.html">
+                    <i class="icon-brain"></i> Asistente IA
+                </a></li>
+                <li><a href="/student/academic-history.html">
+                    <i class="icon-history"></i> Historial
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="studentName">Estudiante</p>
+                        <p class="user-program" id="studentProgram">Programa</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Proceso de Matrícula</h1>
+                <div class="user-status">
+                    <span class="status-indicator online"></span>
+                    <span id="currentDate"></span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Estado en Cola -->
+                <section class="card queue-status-card">
+                    <h2>Estado en Cola de Espera</h2>
+                    <div id="queueStatus">
+                        <div class="queue-info">
+                            <div class="queue-stat">
+                                <span class="stat-label">Posición:</span>
+                                <span class="stat-value" id="queuePosition">--</span>
+                            </div>
+                            <div class="queue-stat">
+                                <span class="stat-label">Lote:</span>
+                                <span class="stat-value" id="batchNumber">--</span>
+                            </div>
+                            <div class="queue-stat">
+                                <span class="stat-label">Estado:</span>
+                                <span class="stat-value" id="queueState">Esperando</span>
+                            </div>
+                        </div>
+                        <div class="queue-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="queueProgress" style="width: 0%"></div>
+                            </div>
+                            <p class="progress-text">Tiempo estimado: <span id="estimatedTime">--</span></p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Selección de Materias -->
+                <section class="card subjects-selection-card">
+                    <h2>Selección de Materias</h2>
+                    <div class="filters">
+                        <select id="semesterFilter" class="form-control">
+                            <option value="">Todos los semestres</option>
+                            <option value="1">Semestre 1</option>
+                            <option value="2">Semestre 2</option>
+                            <option value="3">Semestre 3</option>
+                            <option value="4">Semestre 4</option>
+                            <option value="5">Semestre 5</option>
+                            <option value="6">Semestre 6</option>
+                        </select>
+                        <select id="typeFilter" class="form-control">
+                            <option value="">Todos los tipos</option>
+                            <option value="mandatory">Obligatorias</option>
+                            <option value="elective">Electivas</option>
+                            <option value="optional">Optativas</option>
+                        </select>
+                    </div>
+
+                    <div id="subjectsList" class="subjects-list">
+                        <!-- Materias se cargarán dinámicamente -->
+                    </div>
+
+                    <div class="selected-subjects">
+                        <h3>Materias Seleccionadas (<span id="selectedCount">0</span>/6)</h3>
+                        <div id="selectedSubjects" class="selected-subjects-list">
+                            <!-- Materias seleccionadas -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Resumen y Confirmación -->
+                <section class="card enrollment-summary-card">
+                    <h2>Resumen de Matrícula</h2>
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span>Créditos totales:</span>
+                            <span id="totalCredits">0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Materias:</span>
+                            <span id="totalSubjects">0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Costo estimado:</span>
+                            <span id="estimatedCost">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="otp-section">
+                        <h3>Confirmación con OTP</h3>
+                        <p>Se enviará un código OTP a tu correo electrónico para confirmar la matrícula.</p>
+                        <button id="requestOTPBtn" class="btn btn-primary">
+                            Solicitar Código OTP
+                        </button>
+                        <div id="otpInputSection" class="otp-input-section" style="display: none;">
+                            <input type="text" id="otpInput" class="form-control" placeholder="Ingrese código OTP (6 dígitos)" maxlength="6">
+                            <button id="confirmEnrollmentBtn" class="btn btn-success">
+                                Confirmar Matrícula
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="/Assets/js/student-enrollment.js"></script>
+</body>
+</html>

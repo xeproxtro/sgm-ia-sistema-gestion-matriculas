@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Historial Académico</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+    <link rel="stylesheet" href="/Assets/css/student.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+                <span class="student-badge">Estudiante</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/student-dashboard.html">
+                    <i class="icon-home"></i> Volver al Dashboard
+                </a></li>
+                <li><a href="/student/enrollment-process.html">
+                    <i class="icon-book"></i> Matrícula
+                </a></li>
+                <li><a href="/student/ai-schedule.html">
+                    <i class="icon-brain"></i> Asistente IA
+                </a></li>
+                <li><a href="/student/academic-history.html" class="active">
+                    <i class="icon-history"></i> Historial
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="studentName">Estudiante</p>
+                        <p class="user-program" id="studentProgram">Programa</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Historial Académico</h1>
+                <div class="user-status">
+                    <span class="status-indicator online"></span>
+                    <span id="currentDate"></span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Resumen Académico -->
+                <section class="card academic-summary-card">
+                    <h2>Resumen Académico</h2>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <div class="summary-icon">📚</div>
+                            <div class="summary-data">
+                                <span class="summary-value" id="totalCredits">0</span>
+                                <span class="summary-label">Créditos Completados</span>
+                            </div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-icon">📊</div>
+                            <div class="summary-data">
+                                <span class="summary-value" id="gpa">0.0</span>
+                                <span class="summary-label">Promedio (GPA)</span>
+                            </div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-icon">✅</div>
+                            <div class="summary-data">
+                                <span class="summary-value" id="approvedCount">0</span>
+                                <span class="summary-label">Materias Aprobadas</span>
+                            </div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-icon">⚠️</div>
+                            <div class="summary-data">
+                                <span class="summary-value" id="pendingCount">0</span>
+                                <span class="summary-label">Materias Pendientes</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Progreso de Malla Curricular -->
+                <section class="card curriculum-progress-card">
+                    <h2>Progreso de Malla Curricular</h2>
+                    <div class="progress-overview">
+                        <div class="progress-circle">
+                            <svg viewBox="0 0 36 36">
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                      fill="none" stroke="#e0e0e0" stroke-width="3"/>
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                      fill="none" stroke="#4CAF50" stroke-width="3"
+                                      stroke-dasharray="50, 100" id="progressCircle"/>
+                            </svg>
+                            <div class="progress-text">
+                                <span id="progressPercent">50%</span>
+                            </div>
+                        </div>
+                        <div class="progress-details">
+                            <div class="progress-detail">
+                                <span>Créditos completados:</span>
+                                <span id="creditsCompleted">80/160</span>
+                            </div>
+                            <div class="progress-detail">
+                                <span>Semestre actual:</span>
+                                <span id="currentSemester">5/10</span>
+                            </div>
+                            <div class="progress-detail">
+                                <span>Tiempo estimado de graduación:</span>
+                                <span id="graduationEstimate">3 semestres</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Historial de Materias -->
+                <section class="card subjects-history-card">
+                    <h2>Historial de Materias</h2>
+                    <div class="filters">
+                        <select id="statusFilter" class="form-control">
+                            <option value="">Todos los estados</option>
+                            <option value="approved">Aprobadas</option>
+                            <option value="failed">Reprobadas</option>
+                            <option value="in_progress">En curso</option>
+                            <option value="cancelled">Canceladas</option>
+                        </select>
+                        <select id="semesterFilter" class="form-control">
+                            <option value="">Todos los semestres</option>
+                            <option value="1">Semestre 1</option>
+                            <option value="2">Semestre 2</option>
+                            <option value="3">Semestre 3</option>
+                            <option value="4">Semestre 4</option>
+                            <option value="5">Semestre 5</option>
+                        </select>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Materia</th>
+                                    <th>Créditos</th>
+                                    <th>Semestre</th>
+                                    <th>Año</th>
+                                    <th>Nota</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subjectsTableBody">
+                                <!-- Se cargarán dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="history-stats">
+                        <div class="stat-box approved">
+                            <span class="stat-number" id="statApproved">0</span>
+                            <span class="stat-label">Aprobadas</span>
+                        </div>
+                        <div class="stat-box failed">
+                            <span class="stat-number" id="statFailed">0</span>
+                            <span class="stat-label">Reprobadas</span>
+                        </div>
+                        <div class="stat-box in-progress">
+                            <span class="stat-number" id="statInProgress">0</span>
+                            <span class="stat-label">En curso</span>
+                        </div>
+                        <div class="stat-box cancelled">
+                            <span class="stat-number" id="statCancelled">0</span>
+                            <span class="stat-label">Canceladas</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Materias Reprobadas (Prioridad) -->
+                <section class="card priority-subjects-card" id="priorityCard" style="display: none;">
+                    <h2>⚠️ Materias Prioritarias (Reprobadas)</h2>
+                    <p>Estas materias deben cursarse nuevamente para avanzar en tu programa:</p>
+                    <div id="prioritySubjectsList" class="priority-list">
+                        <!-- Se cargarán dinámicamente -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="/Assets/js/student-history.js"></script>
+</body>
+</html>

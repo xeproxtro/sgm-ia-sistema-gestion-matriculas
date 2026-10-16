@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Inicio de Sesión</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">
+                    <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="uts-logo">
+                    <h1>SGM-IA</h1>
+                </div>
+                <p class="subtitle">Sistema de Gestión de Matrículas con Inteligencia Artificial</p>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="documentNumber">Email</label>
+                    <input type="email" id="documentNumber" name="documentNumber" required
+                           placeholder="Ingrese su email" autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" required
+                           placeholder="Ingrese su contraseña" autocomplete="current-password">
+                </div>
+
+
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    <span class="btn-text">Iniciar Sesión</span>
+                    <span class="btn-loader" style="display: none;">Procesando...</span>
+                </button>
+            </form>
+
+            <div id="otpSection" class="otp-section" style="display: none;">
+                <div class="otp-header">
+                    <h3>Verificación de Dos Factores</h3>
+                    <p>Hemos enviado un código OTP a su correo electrónico. Ingréselo a continuación.</p>
+                </div>
+
+                <form id="otpForm" class="otp-form">
+                    <div class="form-group">
+                        <label for="otpCode">Código OTP</label>
+                        <input type="text" id="otpCode" name="otpCode" required
+                               placeholder="Ingrese el código de 6 dígitos" maxlength="6"
+                               pattern="[0-9]{6}" inputmode="numeric">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <span class="btn-text">Verificar</span>
+                        <span class="btn-loader" style="display: none;">Verificando...</span>
+                    </button>
+
+                    <button type="button" id="resendOtp" class="btn btn-link btn-block">
+                        Reenviar código
+                    </button>
+                </form>
+            </div>
+
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+
+            <div class="login-footer">
+                <p>Unidades Tecnológicas de Santander © 2026</p>
+                <p>Desarrollado por: John Eduardo Ortiz Castellanos & Emmanuel Moreno Rueda</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Assets/js/login.js"></script>
+</body>
+</html>

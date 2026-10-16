@@ -1,0 +1,117 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-uploads-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sgm-ia-app
+  namespace: default
+  labels:
+    app: sgm-ia
+    tier: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sgm-ia
+  template:
+    metadata:
+      labels:
+        app: sgm-ia
+        tier: backend
+    spec:
+      containers:
+      - name: sgm-ia
+        image: sgm-ia:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+          name: http
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: sgm-ia-config
+        - secretRef:
+            name: sgm-ia-secret
+        volumeMounts:
+        - name: uploads-storage
+          mountPath: /app/src/whatever/uploads
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+      volumes:
+      - name: uploads-storage
+        persistentVolumeClaim:
+          claimName: app-uploads-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sgm-ia-service
+  namespace: default
+  labels:
+    app: sgm-ia
+spec:
+  selector:
+    app: sgm-ia
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+    name: http
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: sgm-ia-hpa
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: sgm-ia-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

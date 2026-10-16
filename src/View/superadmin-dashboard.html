@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGM-IA - Panel de Super Administrador</title>
+    <link rel="stylesheet" href="/Assets/css/styles.css">
+    <link rel="stylesheet" href="/Assets/css/dashboard.css">
+    <link rel="stylesheet" href="/Assets/css/superadmin.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="/Assets/images/uts-logo.png" alt="UTS Logo" class="sidebar-logo">
+                <h2>SGM-IA</h2>
+                <span class="superadmin-badge">Super Admin</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/superadmin-dashboard.html" class="active" data-section="overview">
+                    <i class="icon-home"></i> Inicio
+                </a></li>
+                <li><a href="/superadmin/admin-management.html">
+                    <i class="icon-shield"></i> Gestión Administradores
+                </a></li>
+                <li><a href="/superadmin/system-maintenance.html">
+                    <i class="icon-tools"></i> Mantenimiento
+                </a></li>
+                <li><a href="/superadmin/system-audit.html">
+                    <i class="icon-audit"></i> Auditoría
+                </a></li>
+                <li><a href="/superadmin/portal-inspection.html">
+                    <i class="icon-eye"></i> Inspección de Portales
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar superadmin-avatar"></div>
+                    <div class="user-details">
+                        <p class="user-name" id="superadminName">Super Administrador</p>
+                        <p class="user-role">Super Admin</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-block">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1 id="pageTitle">Panel de Super Administrador</h1>
+                <div class="top-bar-actions">
+                    <div class="maintenance-indicator" id="maintenanceIndicator">
+                        <span class="indicator-dot"></span>
+                        <span class="indicator-text">Modo Mantenimiento</span>
+                    </div>
+                    <div class="notification-bell">
+                        <i class="icon-bell"></i>
+                        <span class="notification-count">2</span>
+                    </div>
+                </div>
+            </header>
+
+            <div id="contentArea" class="content-area">
+                <!-- Overview Section -->
+                <section id="overviewSection" class="dashboard-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon icon-admins"></div>
+                            <div class="stat-info">
+                                <h3>Administradores</h3>
+                                <p class="stat-value" id="totalAdmins">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-users"></div>
+                            <div class="stat-info">
+                                <h3>Estudiantes</h3>
+                                <p class="stat-value" id="totalStudents">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-system"></div>
+                            <div class="stat-info">
+                                <h3>Estado Sistema</h3>
+                                <p class="stat-value" id="systemStatus">Operativo</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-security"></div>
+                            <div class="stat-info">
+                                <h3>Eventos Seguridad</h3>
+                                <p class="stat-value" id="securityEvents">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <h3>Estado Global del Sistema</h3>
+                            <div class="global-status">
+                                <div class="status-item">
+                                    <span class="status-label">Modo Mantenimiento:</span>
+                                    <span class="status-value" id="maintenanceStatus">Inactivo</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">Último Backup:</span>
+                                    <span class="status-value" id="lastBackup">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">Versión Sistema:</span>
+                                    <span class="status-value">1.0.0</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">Tiempo Activo:</span>
+                                    <span class="status-value" id="uptime">0h 0m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Acciones Críticas</h3>
+                            <div class="critical-actions">
+                                <button id="toggleMaintenanceBtn" class="btn btn-warning btn-block">
+                                    <i class="icon-tools"></i> Activar Mantenimiento
+                                </button>
+                                <button id="emergencyStopBtn" class="btn btn-danger btn-block">
+                                    <i class="icon-stop"></i> Parada de Emergencia
+                                </button>
+                                <button id="backupBtn" class="btn btn-secondary btn-block">
+                                    <i class="icon-download"></i> Realizar Backup
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Admin Management Section -->
+                <section id="adminManagementSection" class="dashboard-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Gestión de Administradores</h3>
+                            <button id="addAdminBtn" class="btn btn-primary">
+                                <i class="icon-plus"></i> Nuevo Administrador
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Documento</th>
+                                        <th>Nombre</th>
+                                        <th>Correo</th>
+                                        <th>Estado</th>
+                                        <th>Último Acceso</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminsTableBody">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Global Permissions Section -->
+                <section id="globalPermissionsSection" class="dashboard-section">
+                    <div class="card">
+                        <h3>Permisos Globales</h3>
+                        <div class="permissions-container">
+                            <div class="permission-group">
+                                <h4>Permisos de Administradores</h4>
+                                <div class="permission-item">
+                                    <label>
+                                        <input type="checkbox" id="permManageStudents" checked>
+                                        Gestionar Estudiantes
+                                    </label>
+                                </div>
+                                <div class="permission-item">
+                                    <label>
+                                        <input type="checkbox" id="permManageCurricula" checked>
+                                        Gestionar Mallas Curriculares
+                                    </label>
+                                </div>
+                                <div class="permission-item">
+                                    <label>
+                                        <input type="checkbox" id="permManageCourses" checked>
+                                        Gestionar Cursos
+                                    </label>
+                                </div>
+                                <div class="permission-item">
+                                    <label>
+                                        <input type="checkbox" id="permManageQueue" checked>
+                                        Gestionar Colas
+                                    </label>
+                                </div>
+                                <div class="permission-item">
+                                    <label>
+                                        <input type="checkbox" id="permGenerateReports" checked>
+                                        Generar Reportes
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="permission-group">
+                                <h4>Permisos del Sistema</h4>
+                                <div class="permission-item">
+                                    <label>
+                                        <input type="checkbox" id="permMaintenance" checked>
+                                        Activar Mantenimiento
+                                    </label>
+                                </div>
+                                <div class="permission-item">
+                                    <label>
+                                        <input type="checkbox" id="permSystemLogs" checked>
+                                        Ver Logs del Sistema
+                                    </label>
+                                </div>
+                                <div class="permission-item">
+                                    <label>
+                                        <input type="checkbox" id="permAudit" checked>
+                                        Acceso a Auditoría
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="savePermissionsBtn" class="btn btn-primary btn-block">
+                            Guardar Permisos
+                        </button>
+                    </div>
+                </section>
+
+                <!-- System Maintenance Section -->
+                <section id="systemMaintenanceSection" class="dashboard-section">
+                    <div class="card">
+                        <h3>Control de Mantenimiento</h3>
+                        <div class="maintenance-controls">
+                            <div class="maintenance-status">
+                                <div class="status-indicator" id="maintenanceIndicator2">
+                                    <span class="status-dot"></span>
+                                    <span class="status-text">Estado Actual: <strong id="currentMaintenanceStatus">Operativo</strong></span>
+                                </div>
+                            </div>
+
+                            <div class="maintenance-actions">
+                                <button id="activateMaintenanceBtn" class="btn btn-warning btn-block">
+                                    <i class="icon-play"></i> Activar Modo Mantenimiento
+                                </button>
+                                <button id="deactivateMaintenanceBtn" class="btn btn-success btn-block">
+                                    <i class="icon-stop"></i> Desactivar Modo Mantenimiento
+                                </button>
+                            </div>
+
+                            <div class="maintenance-message">
+                                <label for="maintenanceMessage">Mensaje de Mantenimiento</label>
+                                <textarea id="maintenanceMessage" rows="3" placeholder="Mensaje que verán los usuarios durante el mantenimiento"></textarea>
+                                <button id="saveMaintenanceMessageBtn" class="btn btn-secondary">
+                                    Guardar Mensaje
+                                </button>
+                            </div>
+
+                            <div class="maintenance-schedule">
+                                <h4>Programar Mantenimiento</h4>
+                                <div class="form-group">
+                                    <label>Fecha y Hora</label>
+                                    <input type="datetime-local" id="maintenanceSchedule">
+                                </div>
+                                <div class="form-group">
+                                    <label>Duración Estimada (minutos)</label>
+                                    <input type="number" id="maintenanceDuration" min="5" value="30">
+                                </div>
+                                <button id="scheduleMaintenanceBtn" class="btn btn-primary">
+                                    Programar Mantenimiento
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- System Logs Section -->
+                <section id="systemLogsSection" class="dashboard-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Logs del Sistema</h3>
+                            <div class="log-filters">
+                                <select id="logLevel">
+                                    <option value="all">Todos los niveles</option>
+                                    <option value="error">Error</option>
+                                    <option value="warn">Advertencia</option>
+                                    <option value="info">Info</option>
+                                    <option value="debug">Debug</option>
+                                </select>
+                                <input type="date" id="logDate">
+                                <button id="filterLogsBtn" class="btn btn-secondary">Filtrar</button>
+                                <button id="exportLogsBtn" class="btn btn-secondary">Exportar</button>
+                            </div>
+                        </div>
+                        <div id="systemLogsContainer" class="system-logs-container">
+                            <div class="log-entry error">
+                                <span class="log-time">2026-09-07 10:15:30</span>
+                                <span class="log-level">ERROR</span>
+                                <span class="log-message">Error de conexión a base de datos</span>
+                            </div>
+                            <div class="log-entry warn">
+                                <span class="log-time">2026-09-07 10:10:15</span>
+                                <span class="log-level">WARN</span>
+                                <span class="log-message">Alta concurrencia detectada en servidor</span>
+                            </div>
+                            <div class="log-entry info">
+                                <span class="log-time">2026-09-07 10:00:00</span>
+                                <span class="log-level">INFO</span>
+                                <span class="log-message">Sistema iniciado correctamente</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Audit Section -->
+                <section id="auditSection" class="dashboard-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Auditoría del Sistema</h3>
+                            <div class="audit-filters">
+                                <select id="auditAction">
+                                    <option value="all">Todas las acciones</option>
+                                    <option value="login">Inicios de Sesión</option>
+                                    <option value="enrollment">Matrículas</option>
+                                    <option value="admin">Acciones Admin</option>
+                                    <option value="system">Acciones Sistema</option>
+                                </select>
+                                <input type="date" id="auditStartDate">
+                                <input type="date" id="auditEndDate">
+                                <button id="filterAuditBtn" class="btn btn-secondary">Filtrar</button>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha/Hora</th>
+                                        <th>Usuario</th>
+                                        <th>Acción</th>
+                                        <th>Detalles</th>
+                                        <th>IP</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="auditTableBody">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for adding admin -->
+    <div id="adminModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="adminModalTitle">Agregar Administrador</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="adminForm">
+                    <div class="form-group">
+                        <label for="adminDocument">Documento</label>
+                        <input type="text" id="adminDocument" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminName">Nombre Completo</label>
+                        <input type="text" id="adminName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminEmail">Correo Electrónico</label>
+                        <input type="email" id="adminEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminPhone">Teléfono</label>
+                        <input type="tel" id="adminPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminPassword">Contraseña</label>
+                        <input type="password" id="adminPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Assets/js/superadmin-dashboard.js"></script>
+</body>
+</html>
