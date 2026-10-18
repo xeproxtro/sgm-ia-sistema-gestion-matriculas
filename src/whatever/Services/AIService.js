@@ -16,7 +16,7 @@ class AIService {
     console.log('Model:', this.modelName);
     console.log('Using OpenRouter API');
     console.log('Endpoint URL:', this.openRouterUrl);
-    console.log('API Key (hardcoded):', apiKey.substring(0, 20) + '...');
+    console.log('API Key configured:', this.apiKey ? 'Yes' : 'No');
     console.log('==============================');
     console.log('✅ AI Service initialized successfully');
   }
