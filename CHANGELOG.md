@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.4](https://github.com/xeproxtro/sgm-ia-sistema-gestion-matriculas/compare/v1.0.3...v1.0.4) (2026-10-21)
+
+
+### Bug Fixes
+
+* remove undefined apiKey reference in AIService ([4ecabc2](https://github.com/xeproxtro/sgm-ia-sistema-gestion-matriculas/commits/4ecabc239c297b30b13982c8adc33d3ae64d58df))
+
 ### [1.0.3](https://github.com/xeproxtro/sgm-ia-sistema-gestion-matriculas/compare/v1.0.2...v1.0.3) (2026-10-18)
 
 

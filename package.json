@@ -1,6 +1,6 @@
 {
   "name": "sgm-ia-sistema-gestion-matriculas",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Sistema de Gestión de Matrículas para Universidad con Apoyo y Filtros IA - Unidades Tecnológicas de Santander",
   "main": "src/whatever/server.js",
   "scripts": {
