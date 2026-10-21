@@ -1,8 +1,27 @@
+/**
+ * Microservicio de Generación de Reportes PDF (Compacto)
+ * Contiene: Service, Routes y Script en un solo archivo
+ * 
+ * Uso como módulo en Express:
+ * const PDFReportMicroservice = require('./microservices/PDFReportMicroservice');
+ * app.use('/api/reports/pdf', PDFReportMicroservice.router);
+ * 
+ * Uso como script independiente:
+ * node src/whatever/microservices/PDFReportMicroservice.js
+ */
+
+const express = require('express');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
 const { models } = require('../../Model');
 const { Student, AcademicRecord, Subject, Curriculum, User } = models;
+const { sequelize } = require('../Config/database');
+require('dotenv').config();
+
+// ==========================================
+// PARTE 1: SERVICE (Lógica de Negocio)
+// ==========================================
 
 class PDFReportService {
   constructor() {
@@ -448,4 +467,348 @@ class PDFReportService {
   }
 }
 
-module.exports = new PDFReportService();
+// Instancia del servicio
+const pdfReportService = new PDFReportService();
+
+// ==========================================
+// PARTE 2: ROUTES (Endpoints REST)
+// ==========================================
+
+const router = express.Router();
+
+// Middleware de autenticación simple
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: 'Token requerido'
+    });
+  }
+
+  try {
+    const jwt = require('jsonwebtoken');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'dev-secret');
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(403).json({
+      success: false,
+      message: 'Token inválido'
+    });
+  }
+};
+
+// Generar reporte de historial académico
+router.post('/academic-history/:studentId', authenticateToken, async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const result = await pdfReportService.generateAcademicHistoryReport(parseInt(studentId));
+
+    if (!result.success) {
+      return res.status(500).json(result);
+    }
+
+    res.json({
+      success: true,
+      message: 'Reporte generado exitosamente',
+      filename: result.filename,
+      url: `/uploads/reports/${path.basename(result.filename)}`
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al generar reporte',
+      error: error.message
+    });
+  }
+});
+
+// Generar reporte de malla curricular
+router.post('/curriculum/:curriculumId', authenticateToken, async (req, res) => {
+  try {
+    const { curriculumId } = req.params;
+    const result = await pdfReportService.generateCurriculumReport(parseInt(curriculumId));
+
+    if (!result.success) {
+      return res.status(500).json(result);
+    }
+
+    res.json({
+      success: true,
+      message: 'Reporte generado exitosamente',
+      filename: result.filename,
+      url: `/uploads/reports/${path.basename(result.filename)}`
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al generar reporte',
+      error: error.message
+    });
+  }
+});
+
+// Generar certificado de matrícula
+router.post('/enrollment-certificate/:studentId', authenticateToken, async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const result = await pdfReportService.generateEnrollmentCertificate(parseInt(studentId));
+
+    if (!result.success) {
+      return res.status(500).json(result);
+    }
+
+    res.json({
+      success: true,
+      message: 'Certificado generado exitosamente',
+      filename: result.filename,
+      url: `/uploads/reports/${path.basename(result.filename)}`
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al generar certificado',
+      error: error.message
+    });
+  }
+});
+
+// Generar reporte de lista de estudiantes
+router.post('/student-list', authenticateToken, async (req, res) => {
+  try {
+    const filters = req.body;
+    const result = await pdfReportService.generateStudentListReport(filters);
+
+    if (!result.success) {
+      return res.status(500).json(result);
+    }
+
+    res.json({
+      success: true,
+      message: 'Reporte generado exitosamente',
+      filename: result.filename,
+      url: `/uploads/reports/${path.basename(result.filename)}`
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al generar reporte',
+      error: error.message
+    });
+  }
+});
+
+// Eliminar reporte
+router.delete('/:filename', authenticateToken, async (req, res) => {
+  try {
+    const { filename } = req.params;
+    const result = await pdfReportService.deleteReport(filename);
+
+    if (!result.success) {
+      return res.status(404).json(result);
+    }
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al eliminar reporte',
+      error: error.message
+    });
+  }
+});
+
+// Limpiar reportes antiguos (solo superadmin)
+router.post('/cleanup', authenticateToken, async (req, res) => {
+  try {
+    const result = await pdfReportService.cleanOldReports();
+
+    if (!result.success) {
+      return res.status(500).json(result);
+    }
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al limpiar reportes',
+      error: error.message
+    });
+  }
+});
+
+// ==========================================
+// PARTE 3: SCRIPT INDEPENDIENTE
+// ==========================================
+
+class PDFReportMicroservice {
+  constructor() {
+    this.service = pdfReportService;
+    this.cleanupInterval = null;
+  }
+
+  /**
+   * Iniciar el microservicio como script independiente
+   */
+  async start() {
+    try {
+      // Conectar a la base de datos
+      await sequelize.authenticate();
+      console.log('✅ Conexión a base de datos establecida');
+
+      console.log('📄 Microservicio de Reportes PDF iniciado');
+      console.log('===========================================');
+      console.log('Directorio de salida:', this.service.outputDir);
+      console.log('Limpieza automática cada 7 días');
+      console.log('===========================================');
+
+      // Iniciar limpieza automática cada 7 días
+      this.cleanupInterval = setInterval(async () => {
+        console.log('🧹 Ejecutando limpieza de reportes antiguos...');
+        const result = await this.service.cleanOldReports();
+        console.log(result.message);
+      }, 7 * 24 * 60 * 60 * 1000); // 7 días
+
+      // Mantener el proceso activo
+      this.keepAlive();
+    } catch (error) {
+      console.error('❌ Error al iniciar microservicio:', error);
+      process.exit(1);
+    }
+  }
+
+  /**
+   * Detener el microservicio
+   */
+  async stop() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+      this.cleanupInterval = null;
+    }
+    await sequelize.close();
+    console.log('📄 Microservicio de Reportes PDF detenido');
+  }
+
+  /**
+   * Mantener el proceso activo
+   */
+  keepAlive() {
+    process.on('SIGTERM', async () => {
+      console.log('SIGTERM recibido');
+      await this.stop();
+      process.exit(0);
+    });
+
+    process.on('SIGINT', async () => {
+      console.log('SIGINT recibido');
+      await this.stop();
+      process.exit(0);
+    });
+  }
+
+  /**
+   * Generar reporte de historial académico
+   */
+  async generateAcademicHistory(studentId) {
+    console.log(`📄 Generando historial académico para estudiante ${studentId}...`);
+    const result = await this.service.generateAcademicHistoryReport(studentId);
+    console.log(result.success ? '✅ Reporte generado' : '❌ Error:', result.message);
+    return result;
+  }
+
+  /**
+   * Generar reporte de malla curricular
+   */
+  async generateCurriculum(curriculumId) {
+    console.log(`📄 Generando malla curricular ${curriculumId}...`);
+    const result = await this.service.generateCurriculumReport(curriculumId);
+    console.log(result.success ? '✅ Reporte generado' : '❌ Error:', result.message);
+    return result;
+  }
+
+  /**
+   * Generar certificado de matrícula
+   */
+  async generateEnrollmentCertificate(studentId) {
+    console.log(`📄 Generando certificado de matrícula para estudiante ${studentId}...`);
+    const result = await this.service.generateEnrollmentCertificate(studentId);
+    console.log(result.success ? '✅ Certificado generado' : '❌ Error:', result.message);
+    return result;
+  }
+
+  /**
+   * Generar lista de estudiantes
+   */
+  async generateStudentList(filters = {}) {
+    console.log('📄 Generando lista de estudiantes...');
+    const result = await this.service.generateStudentListReport(filters);
+    console.log(result.success ? '✅ Reporte generado' : '❌ Error:', result.message);
+    return result;
+  }
+
+  /**
+   * Limpiar reportes antiguos manualmente
+   */
+  async cleanup() {
+    console.log('🧹 Limpiando reportes antiguos...');
+    const result = await this.service.cleanOldReports();
+    console.log(result.message);
+    return result;
+  }
+}
+
+// ==========================================
+// EXPORTS
+// ==========================================
+
+// Exportar router para usar en Express
+module.exports.router = router;
+
+// Exportar servicio para usar en el código
+module.exports.service = pdfReportService;
+
+// Exportar clase del script independiente
+module.exports.Microservice = PDFReportMicroservice;
+
+// Ejecutar como script independiente si se llama directamente
+if (require.main === module) {
+  const microservice = new PDFReportMicroservice();
+  microservice.start();
+
+  // Si se proporcionan argumentos de línea de comandos
+  const args = process.argv.slice(2);
+  if (args.length > 0) {
+    const command = args[0];
+    
+    if (command === 'history' && args[1]) {
+      const studentId = parseInt(args[1]);
+      microservice.generateAcademicHistory(studentId);
+    } else if (command === 'curriculum' && args[1]) {
+      const curriculumId = parseInt(args[1]);
+      microservice.generateCurriculum(curriculumId);
+    } else if (command === 'certificate' && args[1]) {
+      const studentId = parseInt(args[1]);
+      microservice.generateEnrollmentCertificate(studentId);
+    } else if (command === 'students') {
+      const filters = {};
+      if (args[1]) filters.program = args[1];
+      if (args[2]) filters.semester = parseInt(args[2]);
+      microservice.generateStudentList(filters);
+    } else if (command === 'cleanup') {
+      microservice.cleanup();
+    } else {
+      console.log('\nComandos disponibles:');
+      console.log('  history <studentId>          - Generar historial académico');
+      console.log('  curriculum <curriculumId>    - Generar malla curricular');
+      console.log('  certificate <studentId>      - Generar certificado de matrícula');
+      console.log('  students [program] [semester] - Generar lista de estudiantes');
+      console.log('  cleanup                     - Limpiar reportes antiguos');
+      console.log('\nEjemplos:');
+      console.log('  node PDFReportMicroservice.js history 1');
+      console.log('  node PDFReportMicroservice.js students "Ingeniería de Sistemas" 5');
+    }
+  }
+}

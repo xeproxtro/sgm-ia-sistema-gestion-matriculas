@@ -18,9 +18,9 @@ const queueRoutes = require('./routes/queue');
 const enrollmentRoutes = require('./routes/enrollment');
 const aiRoutes = require('./routes/ai');
 const curriculumRoutes = require('./routes/curriculum');
-const notificationRoutes = require('./routes/notifications');
-const pdfReportRoutes = require('./routes/pdf-reports');
-const fileGenerationRoutes = require('./routes/file-generation');
+const notificationRoutes = require('./microservices/NotificationMicroservice').router;
+const pdfReportRoutes = require('./microservices/PDFReportMicroservice').router;
+const fileGenerationRoutes = require('./microservices/FileGenerationMicroservice').router;
 
 // Import middleware
 const { authenticateToken } = require('./middleware/auth');
